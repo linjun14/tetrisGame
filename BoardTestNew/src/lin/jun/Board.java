@@ -7,6 +7,7 @@ public class Board {
 	static int startRow = 0;
 	static int startCol = 4;
 	private int [][] MESH; 
+	private int j = 12;
 	
 	public Board(int rows, int cols) {
 		this.rows = rows;
