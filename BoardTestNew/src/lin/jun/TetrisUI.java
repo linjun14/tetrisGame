@@ -29,7 +29,6 @@ public class TetrisUI extends Application {
 	final int HEIGHT = SIZE * NUM_ROWS;
 	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
 	static int[][] MESH = new int[NUM_ROWS][NUM_COLS];
-	private static Rectangle[][] MESHRECTS = new Rectangle[NUM_ROWS][NUM_COLS];
 	static int selectedColumn = 5;
 	static int selectedRow = 0;
 	static int score = 0;
@@ -69,7 +68,6 @@ public class TetrisUI extends Application {
 		for (int r = 0; r < NUM_ROWS; r++) {
 			for (int c = 0; c < NUM_COLS; c++) {
 				Rectangle square = new Rectangle(SIZE - 1, SIZE - 1);
-				MESHRECTS[r][c] = square;
 				square.setStyle("-fx-fill: #F1F2F5; -fx-stroke: white; -fx-stroke-width: 1;");
 				gameScreen.add(square, c, r);
 			}
@@ -78,42 +76,6 @@ public class TetrisUI extends Application {
 		screen.getChildren().addAll(gameScreen, separation, gameStats);
 		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
-		
-		game.setOnKeyPressed(e-> {
-			if (e.getCode() == KeyCode.RIGHT) {
-				if (selectedColumn < NUM_COLS - 1) {
-					selectedColumn++;
-					System.out.println(MESHRECTS[selectedRow][selectedRow].getX());
-					System.out.println(MESHRECTS[selectedRow][selectedRow].getY());
-				}
-			}
-			if (e.getCode() == KeyCode.LEFT) {
-				if (selectedColumn > 0) {
-					selectedColumn--;
-				}
-				MESHRECTS[selectedRow][selectedColumn + 1].setStyle("-fx-fill: #F1F2F5; -fx-stroke: white; -fx-stroke-width: 1;");
-				MESHRECTS[selectedRow][selectedColumn].setStyle("-fx-fill: #FFFF00; -fx-stroke: white; -fx-stroke-width: 1;");
-			}
-			if (e.getCode() == KeyCode.DOWN) {
-				if (selectedRow < NUM_ROWS - 1) {
-					selectedRow++;
-					spawnShape();
-				}
-				MESHRECTS[selectedRow - 1][selectedColumn].setStyle("-fx-fill: #F1F2F5; -fx-stroke: white; -fx-stroke-width: 1;");
-				MESHRECTS[selectedRow][selectedColumn].setStyle("-fx-fill: #FFFF00; -fx-stroke: white; -fx-stroke-width: 1;");
-				System.out.println(MESHRECTS[selectedRow][selectedRow].getX());
-				System.out.println(MESHRECTS[selectedRow][selectedRow].getY());
-			}
-			// REMOVE LATER JOHN
-			if (e.getCode() == KeyCode.UP) {
-				if (selectedRow > 0) {
-					selectedRow--;
-					spawnShape();
-				}
-				MESHRECTS[selectedRow + 1][selectedColumn].setStyle("-fx-fill: #F1F2F5; -fx-stroke: white; -fx-stroke-width: 1;");
-				MESHRECTS[selectedRow][selectedColumn].setStyle("-fx-fill: #FFFF00; -fx-stroke: white; -fx-stroke-width: 1;");
-			}
-		});
 		
 		stage.setScene(game);
 		stage.setTitle("TETRIS");
