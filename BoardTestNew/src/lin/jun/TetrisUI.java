@@ -29,6 +29,7 @@ public class TetrisUI extends Application {
 	final int HEIGHT = SIZE * NUM_ROWS;
 	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
 	static int[][] MESH = new int[NUM_ROWS][NUM_COLS];
+	static Pane screen = new Pane();
 	static int selectedColumn = 5;
 	static int selectedRow = 0;
 	static int score = 0;
@@ -40,7 +41,6 @@ public class TetrisUI extends Application {
 		// TODO Auto-generated method stub
 		StackPane gamingMomentSquare = new StackPane();
 		Pane TETRIS = new Pane();
-		Pane screen = new Pane();
 		Line separation = new Line(WIDTH, 0, WIDTH, HEIGHT);
 		GridPane gameScreen = new GridPane();
 		
@@ -77,6 +77,12 @@ public class TetrisUI extends Application {
 		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
 		
+		game.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.DOWN) {
+				spawnShape();
+			}
+		});
+		
 		stage.setScene(game);
 		stage.setTitle("TETRIS");
 		stage.show();
@@ -107,51 +113,70 @@ public class TetrisUI extends Application {
 		Rectangle b = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle c = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle d = new Rectangle(SIZE - 1, SIZE - 1);
-	
+		
 		switch (shapeType + 1) {
 		case 1 :
 			System.out.println("T");
-			/*MESH[1][3] = 1;
+			Shape T_BLOCK = new Shape(a, b, c, d, "T");
+			a.relocate(75, 25);
+			b.relocate(100, 25);
+			c.relocate(125, 25);
+			d.relocate(100, 0);
+			MESH[1][3] = 1;
 			MESH[1][4] = 1;
 			MESH[1][5] = 1;
 			MESH[0][4] = 1;
-			for(int r = 0; r < NUM_ROWS; r++) {
-				for (int col = 0; col < NUM_COLS; col++) {
-					System.out.printf("%s ", MESH[r][col]);
-				}
-				System.out.println();
-			} */
 			break;
 		case 2: 
 			System.out.println("L");
-			/* MESH[1][3] = 1;
+			a.relocate(75, 25);
+			b.relocate(100, 25);
+			c.relocate(125, 25);
+			d.relocate(125, 0);
+			MESH[1][3] = 1;
 			MESH[1][4] = 1;
 			MESH[1][5] = 1;
-			MESH[0][5] = 1; */
+			MESH[0][5] = 1;
 			break;
 		case 3:
 			System.out.println("J");
-			/*MESH[1][3] = 1;
+			a.relocate(75, 25);
+			b.relocate(100, 25);
+			c.relocate(125, 25);
+			d.relocate(75, 0);
+			MESH[1][3] = 1;
 			MESH[1][4] = 1;
 			MESH[1][5] = 1;
-			MESH[0][3] = 1;*/
+			MESH[0][3] = 1;
 			break;
 		case 4:
 			System.out.println("O");
-			/*MESH[0][4] = 1;
+			a.relocate(100, 0);
+			b.relocate(125, 0);
+			c.relocate(100, 25);
+			d.relocate(125, 25);
+			MESH[0][4] = 1;
 			MESH[0][5] = 1;
 			MESH[1][4] = 1;
-			MESH[1][5] = 1;*/
+			MESH[1][5] = 1;
 			break;
 		case 5:
 			System.out.println("I");
-			/*MESH[0][3] = 1;
+			a.relocate(75, 0);
+			b.relocate(100, 0);
+			c.relocate(125, 0);
+			d.relocate(150, 0);
+			MESH[0][3] = 1;
 			MESH[0][4] = 1;
 			MESH[0][5] = 1;
-			MESH[0][6] = 1;*/
+			MESH[0][6] = 1;
 			break;
 		case 6:
 			System.out.println("Z");
+			a.relocate(75, 0);
+			b.relocate(100, 0);
+			c.relocate(100, 25);
+			d.relocate(125, 25);
 			MESH[0][3] = 1;
 			MESH[0][4] = 1;
 			MESH[1][4] = 1;
@@ -159,11 +184,16 @@ public class TetrisUI extends Application {
 			break;
 		case 7:
 			System.out.println("S");
+			a.relocate(75, 25);
+			b.relocate(100, 25);
+			c.relocate(100, 0);
+			d.relocate(125, 0);
 			MESH[1][3] = 1;
 			MESH[1][4] = 1;
 			MESH[0][4] = 1;
 			MESH[0][5] = 1;
 			break;
 		}
+		screen.getChildren().addAll(a, b, c, d);
 	}
 }
