@@ -75,10 +75,32 @@ public class TetrisUI extends Application {
 		screen.getChildren().addAll(gameScreen, separation, gameStats);
 		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
+		Shape john = spawnShape();
 		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN) {
-				spawnShape();
+				john.r1.setY(john.r1.getY() + 25);
+				john.r2.setY(john.r2.getY() + 25);
+				john.r3.setY(john.r3.getY() + 25);
+				john.r4.setY(john.r4.getY() + 25);
+			}
+			if (e.getCode() == KeyCode.LEFT) {
+				john.r1.setX(john.r1.getX() - 25);
+				john.r2.setX(john.r2.getX() - 25);
+				john.r3.setX(john.r3.getX() - 25);
+				john.r4.setX(john.r4.getX() - 25);
+			}
+			if (e.getCode() == KeyCode.RIGHT) {
+				john.r1.setX(john.r1.getX() + 25);
+				john.r2.setX(john.r2.getX() + 25);
+				john.r3.setX(john.r3.getX() + 25);
+				john.r4.setX(john.r4.getX() + 25);
+			}
+			if (e.getCode() == KeyCode.SPACE) {
+				john.r1.setY(HEIGHT - SIZE);
+				john.r2.setY(HEIGHT - SIZE);
+				john.r3.setY(HEIGHT - SIZE);
+				john.r4.setY(HEIGHT - SIZE);
 			}
 		});
 		
@@ -107,7 +129,7 @@ public static Shape spawnShape() {
 		
 		Random rand = new Random();
 		int shapeType = rand.nextInt(7);
-		int jogn = 29031389;
+
 		Rectangle a = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle b = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle c = new Rectangle(SIZE - 1, SIZE - 1);
