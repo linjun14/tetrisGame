@@ -35,26 +35,6 @@ public class TetrisUI extends Application {
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 1;
-	static int g = 2;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	k;
-	
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
