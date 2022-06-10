@@ -107,7 +107,7 @@ public static Shape spawnShape() {
 		
 		Random rand = new Random();
 		int shapeType = rand.nextInt(7);
-			
+		int jogn = 29031389;
 		Rectangle a = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle b = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle c = new Rectangle(SIZE - 1, SIZE - 1);
