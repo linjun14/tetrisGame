@@ -76,7 +76,6 @@ public class TetrisUI extends Application {
 		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
 		Shape john = spawnShape();
-		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN) {
 				john.r1.setY(john.r1.getY() + 25);
@@ -103,7 +102,6 @@ public class TetrisUI extends Application {
 				john.r4.setY(HEIGHT - SIZE);
 			}
 		});
-		
 		stage.setScene(game);
 		stage.setTitle("TETRIS");
 		stage.show();
