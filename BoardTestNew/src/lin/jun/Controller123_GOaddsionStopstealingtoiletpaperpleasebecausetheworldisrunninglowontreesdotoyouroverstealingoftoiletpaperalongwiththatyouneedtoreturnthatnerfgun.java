@@ -5,4 +5,14 @@ public class Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworld
 	public void moveRight(Shape block) {
 		
 	}
+	public void moveLeft(Shape block) {
+		
+	}
+	public void moveDown(Shape block) {
+	
+	}
+	public void SMACK(Shape block) {
+	
+}
+	
 }
