@@ -35,8 +35,7 @@ public class TetrisUI extends Application {
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 1;
-	static int yooo = 1;
-	slkdhfkjhjkjhfkjhjyhkjehjkhdlkdsdaGLKJ;
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -123,10 +122,7 @@ public class TetrisUI extends Application {
 			b.relocate(100, 25);
 			c.relocate(125, 25);
 			d.relocate(100, 0);
-			MESH[1][3] = 1;
-			MESH[1][4] = 1;
-			MESH[1][5] = 1;
-			MESH[0][4] = 1;
+			
 			break;
 		case 2: 
 			System.out.println("L");
@@ -134,10 +130,7 @@ public class TetrisUI extends Application {
 			b.relocate(100, 25);
 			c.relocate(125, 25);
 			d.relocate(125, 0);
-			MESH[1][3] = 1;
-			MESH[1][4] = 1;
-			MESH[1][5] = 1;
-			MESH[0][5] = 1;
+
 			break;
 		case 3:
 			System.out.println("J");
@@ -145,10 +138,7 @@ public class TetrisUI extends Application {
 			b.relocate(100, 25);
 			c.relocate(125, 25);
 			d.relocate(75, 0);
-			MESH[1][3] = 1;
-			MESH[1][4] = 1;
-			MESH[1][5] = 1;
-			MESH[0][3] = 1;
+
 			break;
 		case 4:
 			System.out.println("O");
@@ -156,10 +146,7 @@ public class TetrisUI extends Application {
 			b.relocate(125, 0);
 			c.relocate(100, 25);
 			d.relocate(125, 25);
-			MESH[0][4] = 1;
-			MESH[0][5] = 1;
-			MESH[1][4] = 1;
-			MESH[1][5] = 1;
+
 			break;
 		case 5:
 			System.out.println("I");
@@ -167,10 +154,7 @@ public class TetrisUI extends Application {
 			b.relocate(100, 0);
 			c.relocate(125, 0);
 			d.relocate(150, 0);
-			MESH[0][3] = 1;
-			MESH[0][4] = 1;
-			MESH[0][5] = 1;
-			MESH[0][6] = 1;
+
 			break;
 		case 6:
 			System.out.println("Z");
@@ -178,10 +162,7 @@ public class TetrisUI extends Application {
 			b.relocate(100, 0);
 			c.relocate(100, 25);
 			d.relocate(125, 25);
-			MESH[0][3] = 1;
-			MESH[0][4] = 1;
-			MESH[1][4] = 1;
-			MESH[1][5] = 1;
+
 			break;
 		case 7:
 			System.out.println("S");
@@ -189,10 +170,7 @@ public class TetrisUI extends Application {
 			b.relocate(100, 25);
 			c.relocate(100, 0);
 			d.relocate(125, 0);
-			MESH[1][3] = 1;
-			MESH[1][4] = 1;
-			MESH[0][4] = 1;
-			MESH[0][5] = 1;
+	
 			break;
 		}
 		screen.getChildren().addAll(a, b, c, d);
