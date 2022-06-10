@@ -1,0 +1,5 @@
+package lin.jun;
+
+public class Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun {
+
+}
