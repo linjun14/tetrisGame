@@ -103,7 +103,7 @@ public class TetrisUI extends Application {
 		time.scheduleAtFixedRate(fall, 0, seconds);
 	}
 	
-public static void spawnShape() {
+public static Shape spawnShape() {
 		
 		Random rand = new Random();
 		int shapeType = rand.nextInt(7);
@@ -113,64 +113,66 @@ public static void spawnShape() {
 		Rectangle c = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle d = new Rectangle(SIZE - 1, SIZE - 1);
 		
+		Shape block = null;
 		switch (shapeType + 1) {
 		case 1 :
 			System.out.println("T");
-			Shape T_BLOCK = new Shape(a, b, c, d, "T");
-			T_BLOCK.r1.relocate(75, 25);
-			T_BLOCK.r2.relocate(100, 25);
-			T_BLOCK.r3.relocate(125, 25);
-			T_BLOCK.r4.relocate(100, 0);
+			block = new Shape(a, b, c, d, "T");
+			block.r1.relocate(75, 25);
+			block.r2.relocate(100, 25);
+			block.r3.relocate(125, 25);
+			block.r4.relocate(100, 0);
 			break;
 		case 2: 
 			System.out.println("L");
-			Shape L_BLOCK = new Shape(a, b, c, d, "L");
-			L_BLOCK.r1.relocate(75, 25);
-			L_BLOCK.r2.relocate(100, 25);
-			L_BLOCK.r3.relocate(125, 25);
-			L_BLOCK.r4.relocate(125, 0);
+			block = new Shape(a, b, c, d, "L");
+			block.r1.relocate(75, 25);
+			block.r2.relocate(100, 25);
+			block.r3.relocate(125, 25);
+			block.r4.relocate(125, 0);
 			break;
 		case 3:
 			System.out.println("J");
-			Shape J_BLOCK = new Shape(a, b, c, d, "J");
-			J_BLOCK.r1.relocate(75, 25);
-			J_BLOCK.r2.relocate(100, 25);
-			J_BLOCK.r3.relocate(125, 25);
-			J_BLOCK.r4.relocate(75, 0);
+			block = new Shape(a, b, c, d, "J");
+			block.r1.relocate(75, 25);
+			block.r2.relocate(100, 25);
+			block.r3.relocate(125, 25);
+			block.r4.relocate(75, 0);
 			break;
 		case 4:
 			System.out.println("O");
-			Shape O_BLOCK = new Shape(a, b, c, d, "O");
-			O_BLOCK.r1.relocate(100, 0);
-			O_BLOCK.r2.relocate(125, 0);
-			O_BLOCK.r3.relocate(100, 25);
-			O_BLOCK.r4.relocate(125, 25);
+			block = new Shape(a, b, c, d, "O");
+			block.r1.relocate(100, 0);
+			block.r2.relocate(125, 0);
+			block.r3.relocate(100, 25);
+			block.r4.relocate(125, 25);
 			break;
 		case 5:
 			System.out.println("I");
-			Shape I_BLOCK = new Shape(a, b, c, d, "I");
-			I_BLOCK.r1.relocate(75, 0);
-			I_BLOCK.r2.relocate(100, 0);
-			I_BLOCK.r3.relocate(125, 0);
-			I_BLOCK.r4.relocate(150, 0);
+			block = new Shape(a, b, c, d, "I");
+			block.r1.relocate(75, 0);
+			block.r2.relocate(100, 0);
+			block.r3.relocate(125, 0);
+			block.r4.relocate(150, 0);
 			break;
 		case 6:
 			System.out.println("Z");
-			Shape Z_BLOCK = new Shape(a, b, c, d, "Z");
-			Z_BLOCK.r1.relocate(75, 0);
-			Z_BLOCK.r2.relocate(100, 0);
-			Z_BLOCK.r3.relocate(100, 25);
-			Z_BLOCK.r4.relocate(125, 25);
+			block = new Shape(a, b, c, d, "Z");
+			block.r1.relocate(75, 0);
+			block.r2.relocate(100, 0);
+			block.r3.relocate(100, 25);
+			block.r4.relocate(125, 25);
 			break;
 		case 7:
 			System.out.println("S");
-			Shape S_BLOCK = new Shape(a, b, c, d, "S");
-			S_BLOCK.r1.relocate(75, 25);
-			S_BLOCK.r2.relocate(100, 25);
-			S_BLOCK.r3.relocate(100, 0);
-			S_BLOCK.r4.relocate(125, 0);
+			block = new Shape(a, b, c, d, "S");
+			block.r1.relocate(75, 25);
+			block.r2.relocate(100, 25);
+			block.r3.relocate(100, 0);
+			block.r4.relocate(125, 0);
 			break;
 		}
-		screen.getChildren().addAll(a, b, c, d);
+		screen.getChildren().addAll(block.r1, block.r2, block.r3, block.r4);
+		return block;
 	}
 }
