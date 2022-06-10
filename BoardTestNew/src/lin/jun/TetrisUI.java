@@ -38,6 +38,23 @@ public class TetrisUI extends Application {
 	static int g = 2;
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	k;
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -106,7 +123,7 @@ public class TetrisUI extends Application {
 		time.scheduleAtFixedRate(fall, 0, seconds);
 	}
 	
-	public static void spawnShape() {
+public static void spawnShape() {
 		
 		Random rand = new Random();
 		int shapeType = rand.nextInt(7);
@@ -120,59 +137,58 @@ public class TetrisUI extends Application {
 		case 1 :
 			System.out.println("T");
 			Shape T_BLOCK = new Shape(a, b, c, d, "T");
-			a.relocate(75, 25);
-			b.relocate(100, 25);
-			c.relocate(125, 25);
-			d.relocate(100, 0);
-			
+			T_BLOCK.r1.relocate(75, 25);
+			T_BLOCK.r2.relocate(100, 25);
+			T_BLOCK.r3.relocate(125, 25);
+			T_BLOCK.r4.relocate(100, 0);
 			break;
 		case 2: 
 			System.out.println("L");
-			a.relocate(75, 25);
-			b.relocate(100, 25);
-			c.relocate(125, 25);
-			d.relocate(125, 0);
-
+			Shape L_BLOCK = new Shape(a, b, c, d, "L");
+			L_BLOCK.r1.relocate(75, 25);
+			L_BLOCK.r2.relocate(100, 25);
+			L_BLOCK.r3.relocate(125, 25);
+			L_BLOCK.r4.relocate(125, 0);
 			break;
 		case 3:
 			System.out.println("J");
-			a.relocate(75, 25);
-			b.relocate(100, 25);
-			c.relocate(125, 25);
-			d.relocate(75, 0);
-
+			Shape J_BLOCK = new Shape(a, b, c, d, "J");
+			J_BLOCK.r1.relocate(75, 25);
+			J_BLOCK.r2.relocate(100, 25);
+			J_BLOCK.r3.relocate(125, 25);
+			J_BLOCK.r4.relocate(75, 0);
 			break;
 		case 4:
 			System.out.println("O");
-			a.relocate(100, 0);
-			b.relocate(125, 0);
-			c.relocate(100, 25);
-			d.relocate(125, 25);
-
+			Shape O_BLOCK = new Shape(a, b, c, d, "O");
+			O_BLOCK.r1.relocate(100, 0);
+			O_BLOCK.r2.relocate(125, 0);
+			O_BLOCK.r3.relocate(100, 25);
+			O_BLOCK.r4.relocate(125, 25);
 			break;
 		case 5:
 			System.out.println("I");
-			a.relocate(75, 0);
-			b.relocate(100, 0);
-			c.relocate(125, 0);
-			d.relocate(150, 0);
-
+			Shape I_BLOCK = new Shape(a, b, c, d, "I");
+			I_BLOCK.r1.relocate(75, 0);
+			I_BLOCK.r2.relocate(100, 0);
+			I_BLOCK.r3.relocate(125, 0);
+			I_BLOCK.r4.relocate(150, 0);
 			break;
 		case 6:
 			System.out.println("Z");
-			a.relocate(75, 0);
-			b.relocate(100, 0);
-			c.relocate(100, 25);
-			d.relocate(125, 25);
-
+			Shape Z_BLOCK = new Shape(a, b, c, d, "Z");
+			Z_BLOCK.r1.relocate(75, 0);
+			Z_BLOCK.r2.relocate(100, 0);
+			Z_BLOCK.r3.relocate(100, 25);
+			Z_BLOCK.r4.relocate(125, 25);
 			break;
 		case 7:
 			System.out.println("S");
-			a.relocate(75, 25);
-			b.relocate(100, 25);
-			c.relocate(100, 0);
-			d.relocate(125, 0);
-	
+			Shape S_BLOCK = new Shape(a, b, c, d, "S");
+			S_BLOCK.r1.relocate(75, 25);
+			S_BLOCK.r2.relocate(100, 25);
+			S_BLOCK.r3.relocate(100, 0);
+			S_BLOCK.r4.relocate(125, 0);
 			break;
 		}
 		screen.getChildren().addAll(a, b, c, d);
