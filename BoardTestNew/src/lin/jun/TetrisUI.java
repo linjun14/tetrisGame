@@ -35,6 +35,7 @@ public class TetrisUI extends Application {
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 1;
+	Shape john = spawnShape();
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -75,12 +76,19 @@ public class TetrisUI extends Application {
 		screen.getChildren().addAll(gameScreen, separation, gameStats);
 		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
-		Shape john = spawnShape();
+		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+		
 		Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
 		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-				control.moveDown(john);
+				if (!((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT && (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT)) {
+					john = spawnShape();
+					screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+				}
+				else {
+					control.moveDown(john);
+				}
 			}
 			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
 				control.moveLeft(john);
@@ -180,7 +188,6 @@ public static Shape spawnShape() {
 			block.setLocation(block.r4, 125, 0);
 			break;
 		}
-		screen.getChildren().addAll(block.r1, block.r2, block.r3, block.r4);
 		return block;
 	}
 }
