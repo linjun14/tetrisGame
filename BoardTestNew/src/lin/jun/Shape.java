@@ -54,4 +54,8 @@ public class Shape {
 			shapeRotation = 1;
 		}
 	}
+	public void setLocation(Rectangle r, int x, int y) {
+		r.setX(x);
+		r.setY(y);
+	}
 }

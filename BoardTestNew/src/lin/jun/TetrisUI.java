@@ -63,7 +63,7 @@ public class TetrisUI extends Application {
 		gameStats.getChildren().addAll(scoreAndLines, pieceCounts);
 		gameStats.setTranslateX(WIDTH + 15);
 		gameStats.setTranslateY(15);
-		
+
 		for (int r = 0; r < NUM_ROWS; r++) {
 			for (int c = 0; c < NUM_COLS; c++) {
 				Rectangle square = new Rectangle(SIZE - 1, SIZE - 1);
@@ -76,27 +76,20 @@ public class TetrisUI extends Application {
 		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
 		Shape john = spawnShape();
+		Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
 		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-				john.r1.setY(john.r1.getY() + 25);
-				john.r2.setY(john.r2.getY() + 25);
-				john.r3.setY(john.r3.getY() + 25);
-				john.r4.setY(john.r4.getY() + 25);
+				control.moveDown(john);
 			}
 			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-				john.r1.setX(john.r1.getX() - 25);
-				john.r2.setX(john.r2.getX() - 25);
-				john.r3.setX(john.r3.getX() - 25);
-				john.r4.setX(john.r4.getX() - 25);
+				control.moveLeft(john);
 			}
 			if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
-				john.r1.setX(john.r1.getX() + 25);
-				john.r2.setX(john.r2.getX() + 25);
-				john.r3.setX(john.r3.getX() + 25);
-				john.r4.setX(john.r4.getX() + 25);
+				control.moveRight(john);
 			}
 		});
+
 		stage.setScene(game);
 		stage.setTitle("TETRIS");
 		stage.show();
@@ -133,58 +126,58 @@ public static Shape spawnShape() {
 		case 1 :
 			System.out.println("T");
 			block = new Shape(a, b, c, d, "T");
-			block.r1.relocate(75, 25);
-			block.r2.relocate(100, 25);
-			block.r3.relocate(125, 25);
-			block.r4.relocate(100, 0);
+			block.setLocation(block.r1, 75, 25);
+			block.setLocation(block.r2, 100, 25);
+			block.setLocation(block.r3, 125, 25);
+			block.setLocation(block.r4, 100, 0);
 			break;
 		case 2: 
 			System.out.println("L");
 			block = new Shape(a, b, c, d, "L");
-			block.r1.relocate(75, 25);
-			block.r2.relocate(100, 25);
-			block.r3.relocate(125, 25);
-			block.r4.relocate(125, 0);
+			block.setLocation(block.r1, 75, 25);
+			block.setLocation(block.r2, 100, 25);
+			block.setLocation(block.r3, 125, 25);
+			block.setLocation(block.r4, 125, 0);
 			break;
 		case 3:
 			System.out.println("J");
 			block = new Shape(a, b, c, d, "J");
-			block.r1.relocate(75, 25);
-			block.r2.relocate(100, 25);
-			block.r3.relocate(125, 25);
-			block.r4.relocate(75, 0);
+			block.setLocation(block.r1, 75, 25);
+			block.setLocation(block.r2, 100, 25);
+			block.setLocation(block.r3, 125, 25);
+			block.setLocation(block.r4, 75, 0);
 			break;
 		case 4:
 			System.out.println("O");
 			block = new Shape(a, b, c, d, "O");
-			block.r1.relocate(100, 0);
-			block.r2.relocate(125, 0);
-			block.r3.relocate(100, 25);
-			block.r4.relocate(125, 25);
+			block.setLocation(block.r1, 100, 0);
+			block.setLocation(block.r2, 125, 0);
+			block.setLocation(block.r3, 100, 25);
+			block.setLocation(block.r4, 125, 25);
 			break;
 		case 5:
 			System.out.println("I");
 			block = new Shape(a, b, c, d, "I");
-			block.r1.relocate(75, 0);
-			block.r2.relocate(100, 0);
-			block.r3.relocate(125, 0);
-			block.r4.relocate(150, 0);
+			block.setLocation(block.r1, 75, 0);
+			block.setLocation(block.r2, 100, 0);
+			block.setLocation(block.r3, 125, 0);
+			block.setLocation(block.r4, 150, 0);
 			break;
 		case 6:
 			System.out.println("Z");
 			block = new Shape(a, b, c, d, "Z");
-			block.r1.relocate(75, 0);
-			block.r2.relocate(100, 0);
-			block.r3.relocate(100, 25);
-			block.r4.relocate(125, 25);
+			block.setLocation(block.r1, 75, 0);
+			block.setLocation(block.r2, 100, 0);
+			block.setLocation(block.r3, 100, 25);
+			block.setLocation(block.r4, 125, 25);
 			break;
 		case 7:
 			System.out.println("S");
 			block = new Shape(a, b, c, d, "S");
-			block.r1.relocate(75, 25);
-			block.r2.relocate(100, 25);
-			block.r3.relocate(100, 0);
-			block.r4.relocate(125, 0);
+			block.setLocation(block.r1, 75, 25);
+			block.setLocation(block.r2, 100, 25);
+			block.setLocation(block.r3, 100, 0);
+			block.setLocation(block.r4, 125, 0);
 			break;
 		}
 		screen.getChildren().addAll(block.r1, block.r2, block.r3, block.r4);
