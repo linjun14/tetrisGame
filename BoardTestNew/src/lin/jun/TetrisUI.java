@@ -96,10 +96,14 @@ public class TetrisUI extends Application {
 				}
 			}
 			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-				control.moveLeft(john);
+				if ((john.r1.getX() - SIZE) >= 0 && (john.r2.getX() - SIZE) >= 0 && (john.r3.getX() - SIZE) >= 0 && (john.r4.getX() - SIZE) >= 0 && !tetrisBoard.checkLeft(john)) {
+					control.moveLeft(john);
+				}
 			}
 			if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
-				control.moveRight(john);
+				if ((john.r1.getX() + SIZE) < WIDTH && (john.r2.getX() + SIZE) < WIDTH && (john.r3.getX() + SIZE) < WIDTH && (john.r4.getX() + SIZE) < WIDTH && !tetrisBoard.checkRight(john)) {
+					control.moveRight(john);
+				}
 			}
 		});
 
