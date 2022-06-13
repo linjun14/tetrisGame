@@ -25,9 +25,4 @@ public class Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworld
 		block.r3.setY(block.r3.getY() + SIZE);
 		block.r4.setY(block.r4.getY() + SIZE);
 	}
-	
-	public void SMACK(Shape block) {
-	
-}
-	
 }
