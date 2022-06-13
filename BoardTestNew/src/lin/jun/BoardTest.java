@@ -10,7 +10,6 @@ public class BoardTest {
 	final int PIXEL_SIZE = 25;
 	final int MAX_LENGTH = PIXEL_SIZE * LENGTH_CELLS;
 	final int MAX_HEIGHT = PIXEL_SIZE * HEIGHT_CELLS;
-	private static int [][] MESH = new int[LENGTH_CELLS][HEIGHT_CELLS]; 
 			
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -23,7 +22,6 @@ public class BoardTest {
 		while (!done) {
 			System.out.println("Select a direction (l/r/d/space)");
 			String direction = input.nextLine();
-			gameBoard.placePiece(direction);
 		}
 	}
 }

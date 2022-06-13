@@ -25,17 +25,16 @@ public class TetrisUI extends Application {
 	final static int NUM_ROWS = 20;
 	final static int NUM_COLS = 10;
 	final static int SIZE = 25;
-	final int WIDTH = SIZE * NUM_COLS;
-	final int HEIGHT = SIZE * NUM_ROWS;
+	final static int WIDTH = SIZE * NUM_COLS;
+	final static int HEIGHT = SIZE * NUM_ROWS;
 	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
-	static int[][] MESH = new int[NUM_ROWS][NUM_COLS];
 	static Pane screen = new Pane();
 	static int selectedColumn = 5;
 	static int selectedRow = 0;
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 1;
-	Shape john = spawnShape();
+	static Shape john = spawnShape();
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -83,19 +82,14 @@ public class TetrisUI extends Application {
 		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-				if (!((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT && (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT)) {
-					MESH[(int)john.r1.getY()/SIZE][(int)john.r1.getX()/SIZE] = 1;
-					MESH[(int)john.r2.getY()/SIZE][(int)john.r2.getX()/SIZE] = 1;
-					MESH[(int)john.r3.getY()/SIZE][(int)john.r3.getX()/SIZE] = 1;
-					MESH[(int)john.r4.getY()/SIZE][(int)john.r4.getX()/SIZE] = 1;
+				if (!((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT && (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(john))) {
+					tetrisBoard.fillCell((int)john.r1.getY()/SIZE, (int)john.r1.getX()/SIZE);
+					tetrisBoard.fillCell((int)john.r2.getY()/SIZE, (int)john.r2.getX()/SIZE);
+					tetrisBoard.fillCell((int)john.r3.getY()/SIZE, (int)john.r3.getX()/SIZE);
+					tetrisBoard.fillCell((int)john.r4.getY()/SIZE, (int)john.r4.getX()/SIZE);
 					john = spawnShape();
 					screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
-					for(int i = 0; i < NUM_ROWS; i++) {
-						for (int j = 0; j < NUM_COLS; j++) {
-							System.out.printf("%s ", MESH[i][j]);
-						}
-						System.out.println();
-					}
+					tetrisBoard.displayBoard();
 				}
 				else {
 					control.moveDown(john);
