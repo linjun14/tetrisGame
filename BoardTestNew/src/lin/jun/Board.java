@@ -31,7 +31,9 @@ public class Board {
 			}
 		}
 	}
-	
+	public int[][] getMESH(){
+		return MESH;
+	}
 	public void fillCell(int r, int c) {
 		MESH[r][c] = 1;
 	}

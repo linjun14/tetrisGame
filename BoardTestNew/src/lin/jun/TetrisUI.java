@@ -222,17 +222,42 @@ public static Shape spawnShape() {
 	}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public void deleteLines() {
 	ArrayList<Integer> linesFilled = new ArrayList<Integer>();
 	ArrayList<Node> blocks = new ArrayList<Node>();
-	
+	int lineBlocks = 0;
 	for (Node block: screen.getChildren()) {
 		blocks.add(block);
 	}
-	for (int i = 0; i< NUM_ROWS - 1; i++) {
-		for (int o = 0; o < NUM_COLS - 1; o++) {
-			if(tetrisBoard.MESH[i][o] == 1) {
-				
+	for (int i = 0; i< tetrisBoard.getMESH()[0].length; i++) {
+		for (int o = 0; o < tetrisBoard.getMESH().length; o++) {
+			if(tetrisBoard.getMESH()[i][o] == 1) { //If the indiviual cell is filled or not
+				lineBlocks++;
+			}
+			if (lineBlocks == tetrisBoard.getMESH().length) {
+				linesFilled.add(i); //Add the filled row index
 			}
 		}
 	}
