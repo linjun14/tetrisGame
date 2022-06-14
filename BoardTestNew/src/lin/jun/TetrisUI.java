@@ -32,8 +32,6 @@ public class TetrisUI extends Application {
 	final static int HEIGHT = SIZE * NUM_ROWS;
 	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
 	static Pane screen = new Pane();
-	static int selectedColumn = 5;
-	static int selectedRow = 0;
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 1;
@@ -164,102 +162,82 @@ public static Shape spawnShape() {
 		case 1 :
 			System.out.println("T");
 			block = new Shape(a, b, c, d, "T");
-			block.setLocation(block.r1, 75, 25);
-			block.setLocation(block.r2, 100, 25);
-			block.setLocation(block.r3, 125, 25);
-			block.setLocation(block.r4, 100, 0);
+			block.setLocation(block.r1, 3*SIZE, 1*SIZE);
+			block.setLocation(block.r2, 4*SIZE, 1*SIZE);
+			block.setLocation(block.r3, 5*SIZE, 1*SIZE);
+			block.setLocation(block.r4, 4*SIZE, 0*SIZE);
 			break;
 		case 2: 
 			System.out.println("L");
 			block = new Shape(a, b, c, d, "L");
-			block.setLocation(block.r1, 75, 25);
-			block.setLocation(block.r2, 100, 25);
-			block.setLocation(block.r3, 125, 25);
-			block.setLocation(block.r4, 125, 0);
+			block.setLocation(block.r1, 3*SIZE, 1*SIZE);
+			block.setLocation(block.r2, 4*SIZE, 1*SIZE);
+			block.setLocation(block.r3, 5*SIZE, 1*SIZE);
+			block.setLocation(block.r4, 5*SIZE, 0*SIZE);
 			break;
 		case 3:
 			System.out.println("J");
 			block = new Shape(a, b, c, d, "J");
-			block.setLocation(block.r1, 75, 25);
-			block.setLocation(block.r2, 100, 25);
-			block.setLocation(block.r3, 125, 25);
-			block.setLocation(block.r4, 75, 0);
+			block.setLocation(block.r1, 3*SIZE, 1*SIZE);
+			block.setLocation(block.r2, 4*SIZE, 1*SIZE);
+			block.setLocation(block.r3, 5*SIZE, 1*SIZE);
+			block.setLocation(block.r4, 3*SIZE, 0*SIZE);
 			break;
 		case 4:
 			System.out.println("O");
 			block = new Shape(a, b, c, d, "O");
-			block.setLocation(block.r1, 100, 0);
-			block.setLocation(block.r2, 125, 0);
-			block.setLocation(block.r3, 100, 25);
-			block.setLocation(block.r4, 125, 25);
+			block.setLocation(block.r1, 4*SIZE, 0*SIZE);
+			block.setLocation(block.r2, 5*SIZE, 0*SIZE);
+			block.setLocation(block.r3, 4*SIZE, 1*SIZE);
+			block.setLocation(block.r4, 5*SIZE, 1*SIZE);
 			break;
 		case 5:
 			System.out.println("I");
 			block = new Shape(a, b, c, d, "I");
-			block.setLocation(block.r1, 75, 0);
-			block.setLocation(block.r2, 100, 0);
-			block.setLocation(block.r3, 125, 0);
-			block.setLocation(block.r4, 150, 0);
+			block.setLocation(block.r1, 3*SIZE, 0*SIZE);
+			block.setLocation(block.r2, 4*SIZE, 0*SIZE);
+			block.setLocation(block.r3, 5*SIZE, 0*SIZE);
+			block.setLocation(block.r4, 6*SIZE, 0*SIZE);
 			break;
 		case 6:
 			System.out.println("Z");
 			block = new Shape(a, b, c, d, "Z");
-			block.setLocation(block.r1, 75, 0);
-			block.setLocation(block.r2, 100, 0);
-			block.setLocation(block.r3, 100, 25);
-			block.setLocation(block.r4, 125, 25);
+			block.setLocation(block.r1, 3*SIZE, 0*SIZE);
+			block.setLocation(block.r2, 4*SIZE, 0*SIZE);
+			block.setLocation(block.r3, 4*SIZE, 1*SIZE);
+			block.setLocation(block.r4, 5*SIZE, 1*SIZE);
 			break;
 		case 7:
 			System.out.println("S");
 			block = new Shape(a, b, c, d, "S");
-			block.setLocation(block.r1, 75, 25);
-			block.setLocation(block.r2, 100, 25);
-			block.setLocation(block.r3, 100, 0);
-			block.setLocation(block.r4, 125, 0);
+			block.setLocation(block.r1, 3*SIZE, 1*SIZE);
+			block.setLocation(block.r2, 4*SIZE, 1*SIZE);
+			block.setLocation(block.r3, 4*SIZE, 0*SIZE);
+			block.setLocation(block.r4, 5*SIZE, 0*SIZE);
 			break;
 		}
 		return block;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public void deleteLines() {
 	ArrayList<Integer> linesFilled = new ArrayList<Integer>();
 	ArrayList<Node> blocks = new ArrayList<Node>();
 	int lineBlocks = 0;
-	for (Node block: screen.getChildren()) {
-		blocks.add(block);
-	}
+	
+
+	
 	for (int i = 0; i< tetrisBoard.getMESH()[0].length; i++) {
 		for (int o = 0; o < tetrisBoard.getMESH().length; o++) {
-			if(tetrisBoard.getMESH()[i][o] == 1) { //If the indiviual cell is filled or not
+			if(tetrisBoard.getMESH()[i][o] == 1) { //If the individual cell is filled or not
 				lineBlocks++;
 			}
 			if (lineBlocks == tetrisBoard.getMESH().length) {
 				linesFilled.add(i); //Add the filled row index
 			}
 		}
+	}
+	for (Node block: screen.getChildren()) { //Gets all of the rectangles that are in the 
+		blocks.add(block);
 	}
 	
 }
