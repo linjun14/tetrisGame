@@ -20,6 +20,25 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class TetrisUI extends Application {
 	
 	final static int NUM_ROWS = 20;
@@ -109,6 +128,12 @@ public class TetrisUI extends Application {
 				while ((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT && (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(john)) {
 					control.moveDown(john);
 				}
+				tetrisBoard.fillCell((int)john.r1.getY()/SIZE, (int)john.r1.getX()/SIZE);
+				tetrisBoard.fillCell((int)john.r2.getY()/SIZE, (int)john.r2.getX()/SIZE);
+				tetrisBoard.fillCell((int)john.r3.getY()/SIZE, (int)john.r3.getX()/SIZE);
+				tetrisBoard.fillCell((int)john.r4.getY()/SIZE, (int)john.r4.getX()/SIZE);
+				john = spawnShape();
+				screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 			}
 			if (e.getCode() == KeyCode.Z) {
 				// TODO
@@ -150,6 +175,7 @@ public static Shape spawnShape() {
 		Rectangle d = new Rectangle(SIZE - 1, SIZE - 1);
 		
 		Shape block = null;
+		
 		switch (shapeType + 1) {
 		case 1 :
 			System.out.println("T");
