@@ -106,15 +106,8 @@ public class TetrisUI extends Application {
 				}
 			}
 			if (e.getCode() == KeyCode.SPACE) {
-				for (int i = 0; i < NUM_ROWS - 1; i++) {
-					if (!((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT && (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT && tetrisBoard.checkDown(john))) {
-						john = spawnShape();
-						screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
-						break;
-					}
-					else {
-						control.moveDown(john);
-					}
+				while ((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT && (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(john)) {
+					control.moveDown(john);
 				}
 			}
 			if (e.getCode() == KeyCode.Z) {

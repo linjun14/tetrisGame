@@ -52,6 +52,15 @@ public class Board {
 		}
 	}
 	
+	public boolean isTopOut(Shape block) {
+		for (int i : MESH[0]) {
+			if (i == 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean checkRight(Shape block) {
 		return (MESH[(int)block.r1.getY()/SIZE][(int)block.r1.getX()/SIZE + 1] == 1
 				|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
