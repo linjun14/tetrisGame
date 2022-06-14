@@ -1,11 +1,14 @@
 package lin.jun;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -19,25 +22,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 public class TetrisUI extends Application {
 	
@@ -236,4 +220,22 @@ public static Shape spawnShape() {
 		}
 		return block;
 	}
+
+
+public void deleteLines() {
+	ArrayList<Integer> linesFilled = new ArrayList<Integer>();
+	ArrayList<Node> blocks = new ArrayList<Node>();
+	
+	for (Node block: screen.getChildren()) {
+		blocks.add(block);
+	}
+	for (int i = 0; i< NUM_ROWS - 1; i++) {
+		for (int o = 0; o < NUM_COLS - 1; o++) {
+			if(tetrisBoard.MESH[i][o] == 1) {
+				
+			}
+		}
+	}
+	
+}
 }
