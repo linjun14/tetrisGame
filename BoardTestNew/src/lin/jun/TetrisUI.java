@@ -125,7 +125,10 @@ public class TetrisUI extends Application {
 				
 			}
 			if (e.getCode() == KeyCode.Z) {
-				// TODO
+				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
+						&& (john.r2.getY() - SIZE) >= 0 && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
+					control.rotateLeft(john);
+				}
 			}
 			if (e.getCode() == KeyCode.X) {
 				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
@@ -224,6 +227,7 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
 			block.setLocation(block.r1, 5 * SIZE, 0 * SIZE);
+			System.out.println(block.r1.getX());
 			break;
 		}
 		return block;
