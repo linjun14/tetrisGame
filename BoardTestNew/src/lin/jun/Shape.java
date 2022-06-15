@@ -16,7 +16,7 @@ public class Shape {
 		r4 = d;
 		shapeType = shapeName;
 		if (shapeType.equals("T")) {
-			shapeColor = Color.MEDIUMAQUAMARINE;
+			shapeColor = Color.MEDIUMPURPLE;
 		}
 		else if (shapeType.equals("L")) {
 			shapeColor = Color.BLACK;
@@ -25,7 +25,7 @@ public class Shape {
 			shapeColor = Color.DARKGOLDENROD;
 		}		
 		else if (shapeType.equals("O")) {
-			shapeColor = Color.YELLOW;
+			shapeColor = Color.YELLOWGREEN;
 		}		
 		else if (shapeType.equals("Z")) {
 			shapeColor = Color.HOTPINK;
@@ -34,7 +34,7 @@ public class Shape {
 			shapeColor = Color.SANDYBROWN;
 		}
 		else if (shapeType.equals("I")) {
-			shapeColor = Color.BLANCHEDALMOND;
+			shapeColor = Color.MEDIUMAQUAMARINE;
 		}
 		this.r1.setFill(shapeColor);
 		this.r2.setFill(shapeColor);

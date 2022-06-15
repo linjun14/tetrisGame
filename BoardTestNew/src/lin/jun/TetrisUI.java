@@ -124,7 +124,8 @@ public class TetrisUI extends Application {
 				// TODO
 			}
 			if (e.getCode() == KeyCode.X) {
-				if (!isOutLeft(john) && !isOutRight(john) && !isOutTop(john) && !isOutBottom(john)) {
+				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
+						&& (john.r2.getY() - SIZE) >= 0 && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateRight(john);
 				}
 			}

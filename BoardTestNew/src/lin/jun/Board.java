@@ -84,6 +84,14 @@ public class Board {
 				|| MESH[(int)block.r4.getY()/SIZE + 1][(int)block.r4.getX()/SIZE] == 1);
 	}
 	
+	public boolean checkRotationPoint(Shape block) {
+		return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
+				|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
+				|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE] == 1
+				|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE] == 1);
+	}
+
+	
 	public void spawnPiece() {
 		MESH[0][4] = 1;
 	}
