@@ -83,9 +83,7 @@ public class TetrisUI extends Application {
 
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-				if (!((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT
-						&& (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT
-						&& !tetrisBoard.checkDown(john))) {
+				if (isOutBottom(john)) {
 					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
@@ -99,22 +97,17 @@ public class TetrisUI extends Application {
 				}
 			}
 			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-				if ((john.r1.getX() - SIZE) >= 0 && (john.r2.getX() - SIZE) >= 0 && (john.r3.getX() - SIZE) >= 0
-						&& (john.r4.getX() - SIZE) >= 0 && !tetrisBoard.checkLeft(john)) {
+				if (!isOutLeft(john)) {
 					control.moveLeft(john);
 				}
 			}
 			if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
-				if ((john.r1.getX() + SIZE) < WIDTH && (john.r2.getX() + SIZE) < WIDTH
-						&& (john.r3.getX() + SIZE) < WIDTH && (john.r4.getX() + SIZE) < WIDTH
-						&& !tetrisBoard.checkRight(john)) {
+				if (!isOutRight(john)) {
 					control.moveRight(john);
 				}
 			}
 			if (e.getCode() == KeyCode.SPACE) {
-				while ((john.r1.getY() + SIZE) < HEIGHT && (john.r2.getY() + SIZE) < HEIGHT
-						&& (john.r3.getY() + SIZE) < HEIGHT && (john.r4.getY() + SIZE) < HEIGHT
-						&& !tetrisBoard.checkDown(john)) {
+				while (!isOutBottom(john)) {
 					control.moveDown(john);
 				}
 				tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
@@ -131,7 +124,9 @@ public class TetrisUI extends Application {
 				// TODO
 			}
 			if (e.getCode() == KeyCode.X) {
-				control.rotateRight(john);
+				if (!isOutLeft(john) && !isOutRight(john) && !isOutTop(john) && !isOutBottom(john)) {
+					control.rotateRight(john);
+				}
 			}
 		});
 
@@ -284,5 +279,39 @@ public class TetrisUI extends Application {
 		}
 		
 	}
-
+	
+	public boolean isOutLeft (Shape block) {
+		if ((block.r1.getX() - SIZE) >= 0 && (block.r2.getX() - SIZE) >= 0 && (block.r3.getX() - SIZE) >= 0
+				&& (block.r4.getX() - SIZE) >= 0 && !tetrisBoard.checkLeft(block)) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean isOutRight (Shape block) {
+		if ((block.r1.getX() + SIZE) < WIDTH && (block.r2.getX() + SIZE) < WIDTH
+				&& (block.r3.getX() + SIZE) < WIDTH && (block.r4.getX() + SIZE) < WIDTH
+				&& !tetrisBoard.checkRight(block)) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean isOutTop (Shape block) {
+		if ((block.r1.getY() - SIZE) >= 0 && (block.r2.getY() - SIZE) >= 0
+				&& (block.r3.getY() - SIZE) >= 0 && (block.r4.getY() - SIZE) >= 0
+				&& !tetrisBoard.checkDown(block)) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean isOutBottom (Shape block) {
+		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT
+				&& (block.r3.getY() + SIZE) < HEIGHT && (block.r4.getY() + SIZE) < HEIGHT
+				&& !tetrisBoard.checkDown(block)) {
+			return false;
+		}
+		return true;
+	}
 }
