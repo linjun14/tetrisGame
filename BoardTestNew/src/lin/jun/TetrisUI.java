@@ -228,7 +228,7 @@ public class TetrisUI extends Application {
 	}
 
 	public void deleteLines() {
-		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); 
+		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); //Wh
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
 
@@ -262,13 +262,12 @@ public class TetrisUI extends Application {
 						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
 						screen.getChildren().remove(block);
 					} 
-				}
-				for (Node block : blocks) {
-					Rectangle tempBlock = (Rectangle) block;
-					if (tempBlock.getY() < linesFilled.get(0)*SIZE) {
-						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
-						tempBlock.setY(tempBlock.getY() + SIZE);
-						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 1;
+					else {
+						if (tempBlock.getY() < linesFilled.get(0)*SIZE) {
+							tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
+							tempBlock.setY(tempBlock.getY() + SIZE);
+							tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 1;
+						}
 					}
 				}
 				linesFilled.remove(0);
