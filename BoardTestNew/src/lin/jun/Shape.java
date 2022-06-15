@@ -6,7 +6,6 @@ import javafx.scene.shape.Rectangle;
 public class Shape {
 	Rectangle r1, r2, r3, r4;
 	Color shapeColor;
-	public int shapeRotation = 1;
 	private String shapeType;
 	
 	public Shape(Rectangle a, Rectangle b, Rectangle c, Rectangle d, String shapeName) {
@@ -46,14 +45,6 @@ public class Shape {
 		return shapeType;
 	}
 	
-	public void rotateShape() {
-		if (shapeRotation != 4) {
-			shapeRotation++;
-		}
-		else {
-			shapeRotation = 1;
-		}
-	}
 	public void setLocation(Rectangle r, int x, int y) {
 		r.setX(x);
 		r.setY(y);

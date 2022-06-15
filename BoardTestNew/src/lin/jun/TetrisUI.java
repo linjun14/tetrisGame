@@ -52,13 +52,17 @@ public class TetrisUI extends Application {
 		VBox gameStats = new VBox(10);
 		Rectangle statsBoxSize = new Rectangle(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2);
 		gameStats.setShape(statsBoxSize);
-
+		
 		VBox scoreAndLines = new VBox(5);
-		Font labelFont = new Font("Arial", 15);
+		Font labelFont = new Font("Arial", 25);
+		
+		Label next = new Label("NEXT");
+		Font nextLabelFont = new Font("Arial", 40);
 		
 		scoreLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
-		scoreAndLines.getChildren().addAll(scoreLabel, lineLabel);
+		next.setFont(nextLabelFont);
+		scoreAndLines.getChildren().addAll(scoreLabel, lineLabel, next);
 
 		VBox pieceCounts = new VBox(5);
 
@@ -77,6 +81,7 @@ public class TetrisUI extends Application {
 		screen.getChildren().addAll(separation2, gameScreen, separation, gameStats);
 		gamingMomentSquare.getChildren().addAll(screen);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 2, HEIGHT);
+		
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 
 		Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
@@ -122,7 +127,6 @@ public class TetrisUI extends Application {
 				deleteLines();
 				john = spawnShape();
 				screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
-				
 			}
 			if (e.getCode() == KeyCode.Z) {
 				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
