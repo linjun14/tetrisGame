@@ -34,9 +34,9 @@ public class TetrisUI extends Application {
 	static Pane screen = new Pane();
 	static int score = 0;
 	static int linesCleared = 0;
-	static int level = 1;
+	static int level = 0;
 	static Shape john = spawnShape();
-
+	static Label scoreLabel = new Label("Score: " + score);
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -54,7 +54,7 @@ public class TetrisUI extends Application {
 
 		VBox scoreAndLines = new VBox(5);
 		Font labelFont = new Font("Arial", 15);
-		Label scoreLabel = new Label("Score: " + score);
+		
 		Label lineLabel = new Label("Lines: " + linesCleared);
 		scoreLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
@@ -94,6 +94,8 @@ public class TetrisUI extends Application {
 					tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
+					score += 1;
+					scoreLabel.setText("Score: " + score);
 				}
 			}
 			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
@@ -109,6 +111,8 @@ public class TetrisUI extends Application {
 			if (e.getCode() == KeyCode.SPACE) {
 				while (!isOutBottom(john)) {
 					control.moveDown(john);
+					score += 2;
+					scoreLabel.setText("Score: " + score);
 				}
 				tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
 				tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
@@ -246,6 +250,19 @@ public class TetrisUI extends Application {
 			lineBlocks = 0;
 			
 		}
+		if (linesFilled.size() == 1)	{
+			score += 40*(level + 1);	
+		}
+		else if (linesFilled.size() == 2)	{
+			score += 100*(level + 1);
+		}
+		else if (linesFilled.size() == 3)	{
+			score += 300*(level + 1);
+		}
+		else if (linesFilled.size() == 4)	{
+			score += 1200*(level + 1);
+		}
+		scoreLabel.setText("Score: " + score);
 		if (linesFilled.size() > 0) {
 			do {
 				for (Node block : screen.getChildren()) { // Gets all of the rectangles that are in the
