@@ -90,6 +90,7 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+					control.resetRotation();
 					john = spawnShape();
 					screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 					tetrisBoard.displayBoard();
@@ -120,6 +121,7 @@ public class TetrisUI extends Application {
 				tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 				tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+				control.resetRotation();
 				deleteLines();
 				john = spawnShape();
 				screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
@@ -129,7 +131,7 @@ public class TetrisUI extends Application {
 				// TODO
 			}
 			if (e.getCode() == KeyCode.X) {
-				// TODO
+				control.rotateRight(john);
 			}
 		});
 
