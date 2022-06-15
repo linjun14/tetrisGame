@@ -216,10 +216,10 @@ public class TetrisUI extends Application {
 		case 7:
 			System.out.println("S");
 			block = new Shape(a, b, c, d, "S");
-			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r3, 4 * SIZE, 0 * SIZE);
-			block.setLocation(block.r4, 5 * SIZE, 0 * SIZE);
+			block.setLocation(block.r4, 3 * SIZE, 1 * SIZE);
+			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 5 * SIZE, 0 * SIZE);
 			break;
 		}
 		return block;
