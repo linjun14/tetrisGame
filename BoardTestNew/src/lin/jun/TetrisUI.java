@@ -296,6 +296,15 @@ public class TetrisUI extends Application {
 		return nextShape;
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void deleteLines() {
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); 
 		ArrayList<Node> blocks = new ArrayList<Node>();
