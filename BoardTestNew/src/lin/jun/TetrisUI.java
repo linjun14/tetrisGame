@@ -245,7 +245,7 @@ public class TetrisUI extends Application {
 			}
 			System.out.println(lineBlocks);
 			if (lineBlocks == NUM_COLS) {
-				linesFilled.add( i + linesFilled.size()); // Add the filled row index
+				linesFilled.add(i); // Add the filled row index
 			}
 			lineBlocks = 0;
 			
