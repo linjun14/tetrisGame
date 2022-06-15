@@ -35,7 +35,8 @@ public class TetrisUI extends Application {
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 0;
-	static Shape john = spawnShape();
+	static Shape nextShape = spawnShape();
+	static Shape john = spawnShapeOnBoard(nextShape);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
 	@Override
@@ -56,13 +57,18 @@ public class TetrisUI extends Application {
 		VBox scoreAndLines = new VBox(5);
 		Font labelFont = new Font("Arial", 25);
 		
-		Label next = new Label("NEXT");
+		Label nextLabel = new Label("NEXT");
 		Font nextLabelFont = new Font("Arial", 40);
+		nextLabel.setTranslateX(SIZE * 2);
+		nextLabel.setTranslateY(SIZE * 3);
+		Rectangle nextBox = new Rectangle(SIZE * 7, SIZE * 4);
+		nextBox.setTranslateY(SIZE * 3);
+		nextBox.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 4;");
 		
 		scoreLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
-		next.setFont(nextLabelFont);
-		scoreAndLines.getChildren().addAll(scoreLabel, lineLabel, next);
+		nextLabel.setFont(nextLabelFont);
+		scoreAndLines.getChildren().addAll(scoreLabel, lineLabel, nextLabel, nextBox);
 
 		VBox pieceCounts = new VBox(5);
 
@@ -82,7 +88,9 @@ public class TetrisUI extends Application {
 		gamingMomentSquare.getChildren().addAll(screen);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 2, HEIGHT);
 		
+		nextShape = spawnShape();
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 
 		Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
 
@@ -94,8 +102,9 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 					control.resetRotation();
-					john = spawnShape();
-					screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+					john = spawnShapeOnBoard(nextShape);
+					nextShape = spawnShape();
+					screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 					tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
@@ -125,8 +134,9 @@ public class TetrisUI extends Application {
 				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 				control.resetRotation();
 				deleteLines();
-				john = spawnShape();
-				screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+				john = spawnShapeOnBoard(nextShape);
+				nextShape = spawnShape();
+				screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 			}
 			if (e.getCode() == KeyCode.Z) {
 				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
@@ -179,64 +189,113 @@ public class TetrisUI extends Application {
 		case 1:
 			System.out.println("T");
 			block = new Shape(a, b, c, d, "T");
-			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
-			block.setLocation(block.r4, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 13 * SIZE, 8 * SIZE);
 			break;
 		case 2:
 			System.out.println("L");
 			block = new Shape(a, b, c, d, "L");
-			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
-			block.setLocation(block.r4, 5 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 14 * SIZE, 8 * SIZE);
 			break;
 		case 3:
 			System.out.println("J");
 			block = new Shape(a, b, c, d, "J");
-			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
-			block.setLocation(block.r4, 3 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 14 * SIZE, 8 * SIZE);
 			break;
 		case 4:
 			System.out.println("O");
 			block = new Shape(a, b, c, d, "O");
-			block.setLocation(block.r1, 4 * SIZE, 0 * SIZE);
-			block.setLocation(block.r2, 5 * SIZE, 0 * SIZE);
-			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
+			block.setLocation(block.r1, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r2, 14 * SIZE, 8 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 14 * SIZE, 9 * SIZE);
 			break;
 		case 5:
 			System.out.println("I");
 			block = new Shape(a, b, c, d, "I");
-			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
-			block.setLocation(block.r3, 5 * SIZE, 0 * SIZE);
-			block.setLocation(block.r4, 6 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r3, 14 * SIZE, 8 * SIZE);
+			block.setLocation(block.r4, 15 * SIZE, 8 * SIZE);
 			break;
 		case 6:
 			System.out.println("Z");
 			block = new Shape(a, b, c, d, "Z");
-			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
-			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
+			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 14 * SIZE, 9 * SIZE);
 			break;
 		case 7:
 			System.out.println("S");
 			block = new Shape(a, b, c, d, "S");
-			block.setLocation(block.r4, 3 * SIZE, 1 * SIZE);
-			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
-			block.setLocation(block.r1, 5 * SIZE, 0 * SIZE);
-			System.out.println(block.r1.getX());
+			block.setLocation(block.r4, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r1, 14 * SIZE, 8 * SIZE);
 			break;
 		}
 		return block;
 	}
 
+	public static Shape spawnShapeOnBoard(Shape block) {
+		
+		String shapeType = block.getShapeType();
+		Shape nextShape = block;
+
+		if (shapeType.equals("T")) {
+			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
+			block.setLocation(block.r4, 4 * SIZE, 0 * SIZE);
+		}
+		else if (shapeType.equals("L")) {
+			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
+			block.setLocation(block.r4, 5 * SIZE, 0 * SIZE);
+		}
+		else if (shapeType.equals("J")) {
+			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
+			block.setLocation(block.r4, 3 * SIZE, 0 * SIZE);
+		}
+		else if (shapeType.equals("O")) {
+			block.setLocation(block.r1, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r2, 5 * SIZE, 0 * SIZE);
+			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
+		}
+		else if (shapeType.equals("I")) {
+			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r3, 5 * SIZE, 0 * SIZE);
+			block.setLocation(block.r4, 6 * SIZE, 0 * SIZE);
+		}
+		else if (shapeType.equals("Z")) {
+			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
+		}
+		else if (shapeType.equals("S")) {
+			block.setLocation(block.r4, 3 * SIZE, 1 * SIZE);
+			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 5 * SIZE, 0 * SIZE);
+		}
+		return nextShape;
+	}
+	
 	public void deleteLines() {
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); 
 		ArrayList<Node> blocks = new ArrayList<Node>();
