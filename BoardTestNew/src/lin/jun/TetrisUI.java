@@ -37,12 +37,13 @@ public class TetrisUI extends Application {
 	static int level = 0;
 	static Shape john = spawnShape();
 	static Label scoreLabel = new Label("Score: " + score);
+	static Label lineLabel = new Label("Lines: " + linesCleared);
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
 		StackPane gamingMomentSquare = new StackPane();
-		Pane TETRIS = new Pane();
 		Line separation = new Line(WIDTH, 0, WIDTH, HEIGHT);
+		Line separation2 = new Line(0, 0, WIDTH, HEIGHT);
 		GridPane gameScreen = new GridPane();
 
 		Rectangle gameRect = new Rectangle(0, 0, WIDTH, HEIGHT);
@@ -55,7 +56,6 @@ public class TetrisUI extends Application {
 		VBox scoreAndLines = new VBox(5);
 		Font labelFont = new Font("Arial", 15);
 		
-		Label lineLabel = new Label("Lines: " + linesCleared);
 		scoreLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
 		scoreAndLines.getChildren().addAll(scoreLabel, lineLabel);
@@ -73,10 +73,10 @@ public class TetrisUI extends Application {
 				gameScreen.add(square, c, r);
 			}
 		}
-
-		screen.getChildren().addAll(gameScreen, separation, gameStats);
-		gamingMomentSquare.getChildren().addAll(screen, TETRIS);
-		Scene game = new Scene(gamingMomentSquare, WIDTH * 1.5, HEIGHT);
+		gameScreen.setAlignment(Pos.CENTER);
+		screen.getChildren().addAll(separation2, gameScreen, separation, gameStats);
+		gamingMomentSquare.getChildren().addAll(screen);
+		Scene game = new Scene(gamingMomentSquare, WIDTH * 2, HEIGHT);
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 
 		Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
@@ -230,7 +230,7 @@ public class TetrisUI extends Application {
 	}
 
 	public void deleteLines() {
-		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); //Wh
+		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); 
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
 
@@ -262,6 +262,8 @@ public class TetrisUI extends Application {
 		else if (linesFilled.size() == 4)	{
 			score += 1200*(level + 1);
 		}
+		linesCleared += linesFilled.size();
+		lineLabel.setText("Lines Cleared: " + linesCleared);
 		scoreLabel.setText("Score: " + score);
 		if (linesFilled.size() > 0) {
 			do {
