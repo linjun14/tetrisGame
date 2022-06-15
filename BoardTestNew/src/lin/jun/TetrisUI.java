@@ -258,8 +258,7 @@ public class TetrisUI extends Application {
 					if (tempBlock.getY() == linesFilled.get(0) * SIZE) {
 						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
 						screen.getChildren().remove(block);
-					} 
-					
+					} 	
 				}
 				
 				for (Node block : blocks) {
@@ -267,13 +266,17 @@ public class TetrisUI extends Application {
 					if (tempBlock.getY() < linesFilled.get(0)*SIZE) {
 						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
 						tempBlock.setY(tempBlock.getY() + SIZE);
+					}
+				}
+
+				linesFilled.remove(0);
+				blocks.clear();
+				for (Node block : screen.getChildren()) { // Gets all of the rectangles that are in the
+					if (block instanceof Rectangle) {// Filter out the Rectangles (Just in case)
+						Rectangle tempBlock = (Rectangle) block;
 						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 1;
 					}
 				}
-				
-				linesFilled.remove(0);
-				blocks.clear();
-
 
 		} while (linesFilled.size() > 0); 
 		}
