@@ -61,9 +61,9 @@ public class TetrisUI extends Application {
 		Label nextLabel = new Label("NEXT");
 		Font nextLabelFont = new Font("Arial", 40);
 		nextLabel.setTranslateX(SIZE * 2);
-		nextLabel.setTranslateY(SIZE * 3);
+		nextLabel.setTranslateY(SIZE * 2);
 		Rectangle nextBox = new Rectangle(SIZE * 7, SIZE * 4);
-		nextBox.setTranslateY(SIZE * 3);
+		nextBox.setTranslateY(SIZE * 2);
 		nextBox.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 4;");
 		
 		scoreLabel.setFont(labelFont);
@@ -337,7 +337,7 @@ public class TetrisUI extends Application {
 		level = (linesCleared / 10) + 1;
 		levelLabel.setText("Level: " + (level));
 		
-		lineLabel.setText("Lines Cleared: " + linesCleared);
+		lineLabel.setText("Lines: " + linesCleared);
 		scoreLabel.setText("Score: " + score);
 		if (linesFilled.size() > 0) {
 			do {
