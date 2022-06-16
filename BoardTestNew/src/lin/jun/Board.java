@@ -64,17 +64,29 @@ public class Board {
 	}
 	
 	public boolean checkRight(Shape block) {
-		return (MESH[(int)block.r1.getY()/SIZE][(int)block.r1.getX()/SIZE + 1] == 1
-				|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
-				|| MESH[(int)block.r3.getY()/SIZE][(int)block.r3.getX()/SIZE + 1] == 1
-				|| MESH[(int)block.r4.getY()/SIZE][(int)block.r4.getX()/SIZE + 1] == 1);
+		if (block.r2.getY() == 0) {
+			return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r3.getY()/SIZE][(int)block.r3.getX()/SIZE + 1] == 1);
+		}
+		else {
+			return (MESH[(int)block.r1.getY()/SIZE][(int)block.r1.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r3.getY()/SIZE][(int)block.r3.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r4.getY()/SIZE][(int)block.r4.getX()/SIZE + 1] == 1);
+		}
 	}
 	
 	public boolean checkLeft(Shape block) {
-		return (MESH[(int)block.r1.getY()/SIZE][(int)block.r1.getX()/SIZE - 1] == 1
-				|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
-				|| MESH[(int)block.r3.getY()/SIZE][(int)block.r3.getX()/SIZE - 1] == 1
-				|| MESH[(int)block.r4.getY()/SIZE][(int)block.r4.getX()/SIZE - 1] == 1);
+		if (block.r2.getY() == 0) {
+			return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r3.getY()/SIZE][(int)block.r3.getX()/SIZE - 1] == 1);
+		}
+		else {
+			return (MESH[(int)block.r1.getY()/SIZE][(int)block.r1.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r3.getY()/SIZE][(int)block.r3.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r4.getY()/SIZE][(int)block.r4.getX()/SIZE - 1] == 1);
+		}
 	}
 	
 	public boolean checkDown(Shape block) {
@@ -85,10 +97,21 @@ public class Board {
 	}
 	
 	public boolean checkRotationPoint(Shape block) {
-		return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
-				|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
-				|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE] == 1
-				|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE] == 1);
+		if (block.r2.getY() == 0) {
+			return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE] == 1);
+		}
+		else {
+			return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE] == 1
+					|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE] == 1
+					|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE - 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE + 1] == 1
+					|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE - 1] == 1);
+		}
 	}
 
 	

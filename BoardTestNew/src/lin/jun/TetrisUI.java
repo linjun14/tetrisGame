@@ -148,8 +148,7 @@ public class TetrisUI extends Application {
 				}
 			}
 			if (e.getCode() == KeyCode.X) {
-				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
-						&& (john.r2.getY() - SIZE) >= 0 && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
+				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateRight(john);
 				}
 			}
@@ -279,10 +278,10 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
 		}
 		else if (shapeType.equals("I")) {
-			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
-			block.setLocation(block.r3, 5 * SIZE, 0 * SIZE);
-			block.setLocation(block.r4, 6 * SIZE, 0 * SIZE);
+			block.setLocation(block.r1, 6 * SIZE, 0 * SIZE);
+			block.setLocation(block.r2, 5 * SIZE, 0 * SIZE);
+			block.setLocation(block.r3, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r4, 3 * SIZE, 0 * SIZE);
 		}
 		else if (shapeType.equals("Z")) {
 			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
