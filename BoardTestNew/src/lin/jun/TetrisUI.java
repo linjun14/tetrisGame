@@ -211,7 +211,7 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
 			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
 			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 14 * SIZE, 8 * SIZE);
+			block.setLocation(block.r4, 12 * SIZE, 8 * SIZE);
 			break;
 		case 4:
 			System.out.println("O");
