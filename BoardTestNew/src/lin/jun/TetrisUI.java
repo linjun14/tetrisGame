@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -40,6 +41,8 @@ public class TetrisUI extends Application {
 	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
+	static Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -94,8 +97,8 @@ public class TetrisUI extends Application {
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 
-		Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
-
+		fallPiece(1000);
+		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
 				if (isOutBottom(john)) {
@@ -104,9 +107,7 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 					control.resetRotation();
-					john = spawnShapeOnBoard(nextShape);
-					nextShape = spawnShape();
-					screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
+					deleteLines();
 					tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
@@ -136,9 +137,6 @@ public class TetrisUI extends Application {
 				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 				control.resetRotation();
 				deleteLines();
-				john = spawnShapeOnBoard(nextShape);
-				nextShape = spawnShape();
-				screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 				System.out.println("Level" + level);
 			}
 			if (e.getCode() == KeyCode.Z) {
@@ -167,12 +165,22 @@ public class TetrisUI extends Application {
 	public static void fallPiece(int seconds) {
 		TimerTask fall = new TimerTask() {
 			public void run() {
-				System.out.println("john li");
+				if (isOutBottom(john)) {
+					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
+					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
+					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
+					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+					control.resetRotation();
+					Platform.runLater(() -> deleteLines());
+					tetrisBoard.displayBoard();
+				} else {
+					control.moveDown(john);
+				}
 			}
 		};
 
 		Timer time = new Timer();
-		time.scheduleAtFixedRate(fall, 0, seconds);
+		time.scheduleAtFixedRate(fall, seconds, seconds);
 	}
 
 	public static Shape spawnShape() {
@@ -298,7 +306,7 @@ public class TetrisUI extends Application {
 		return nextShape;
 	}
 
-	public void deleteLines() {
+	public static void deleteLines() {
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); 
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
@@ -373,7 +381,9 @@ public class TetrisUI extends Application {
 
 		} while (linesFilled.size() > 0); 
 		}
-		
+		john = spawnShapeOnBoard(nextShape);
+		nextShape = spawnShape();
+		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 	}
 	
 	public boolean isOutLeft (Shape block) {
@@ -402,7 +412,7 @@ public class TetrisUI extends Application {
 		return true;
 	}
 	
-	public boolean isOutBottom (Shape block) {
+	public static boolean isOutBottom (Shape block) {
 		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT
 				&& (block.r3.getY() + SIZE) < HEIGHT && (block.r4.getY() + SIZE) < HEIGHT
 				&& !tetrisBoard.checkDown(block)) {
