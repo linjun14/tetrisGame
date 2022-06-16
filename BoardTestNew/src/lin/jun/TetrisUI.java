@@ -108,7 +108,7 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 					control.resetRotation();
 					deleteLines();
-					tetrisBoard.displayBoard();
+					// tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
 					score += 1;
@@ -172,7 +172,7 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 					control.resetRotation();
 					Platform.runLater(() -> deleteLines());
-					tetrisBoard.displayBoard();
+					// tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
 				}
@@ -197,7 +197,6 @@ public class TetrisUI extends Application {
 
 		switch (shapeType + 1) {
 		case 1:
-			System.out.println("T");
 			block = new Shape(a, b, c, d, "T");
 			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
 			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
@@ -205,7 +204,6 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 13 * SIZE, 8 * SIZE);
 			break;
 		case 2:
-			System.out.println("L");
 			block = new Shape(a, b, c, d, "L");
 			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
 			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
@@ -213,7 +211,6 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 14 * SIZE, 8 * SIZE);
 			break;
 		case 3:
-			System.out.println("J");
 			block = new Shape(a, b, c, d, "J");
 			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
 			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
@@ -221,7 +218,6 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 12 * SIZE, 8 * SIZE);
 			break;
 		case 4:
-			System.out.println("O");
 			block = new Shape(a, b, c, d, "O");
 			block.setLocation(block.r1, 13 * SIZE, 8 * SIZE);
 			block.setLocation(block.r2, 14 * SIZE, 8 * SIZE);
@@ -229,7 +225,6 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 14 * SIZE, 9 * SIZE);
 			break;
 		case 5:
-			System.out.println("I");
 			block = new Shape(a, b, c, d, "I");
 			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
 			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
@@ -237,7 +232,6 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 15 * SIZE, 8 * SIZE);
 			break;
 		case 6:
-			System.out.println("Z");
 			block = new Shape(a, b, c, d, "Z");
 			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
 			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
@@ -245,7 +239,6 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r4, 14 * SIZE, 9 * SIZE);
 			break;
 		case 7:
-			System.out.println("S");
 			block = new Shape(a, b, c, d, "S");
 			block.setLocation(block.r4, 12 * SIZE, 9 * SIZE);
 			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
@@ -320,7 +313,7 @@ public class TetrisUI extends Application {
 					break;
 				}
 			}
-			System.out.println(lineBlocks);
+			// System.out.println(lineBlocks);
 			if (lineBlocks == NUM_COLS) {
 				linesFilled.add(i); // Add the filled row index
 			}
