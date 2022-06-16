@@ -34,9 +34,10 @@ public class TetrisUI extends Application {
 	static Pane screen = new Pane();
 	static int score = 0;
 	static int linesCleared = 0;
-	static int level = 0;
+	static int level = 1;
 	static Shape nextShape = spawnShape();
 	static Shape john = spawnShapeOnBoard(nextShape);
+	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
 	@Override
@@ -66,9 +67,10 @@ public class TetrisUI extends Application {
 		nextBox.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 4;");
 		
 		scoreLabel.setFont(labelFont);
+		levelLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
 		nextLabel.setFont(nextLabelFont);
-		scoreAndLines.getChildren().addAll(scoreLabel, lineLabel, nextLabel, nextBox);
+		scoreAndLines.getChildren().addAll(levelLabel, scoreLabel, lineLabel, nextLabel, nextBox);
 
 		VBox pieceCounts = new VBox(5);
 
@@ -137,6 +139,7 @@ public class TetrisUI extends Application {
 				john = spawnShapeOnBoard(nextShape);
 				nextShape = spawnShape();
 				screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
+				System.out.println("Level" + level);
 			}
 			if (e.getCode() == KeyCode.Z) {
 				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
@@ -318,18 +321,22 @@ public class TetrisUI extends Application {
 			
 		}
 		if (linesFilled.size() == 1)	{
-			score += 40*(level + 1);	
+			score += 40*(level);	
 		}
 		else if (linesFilled.size() == 2)	{
-			score += 100*(level + 1);
+			score += 100*(level);
 		}
 		else if (linesFilled.size() == 3)	{
-			score += 300*(level + 1);
+			score += 300*(level);
 		}
 		else if (linesFilled.size() == 4)	{
-			score += 1200*(level + 1);
+			score += 1200*(level);
 		}
 		linesCleared += linesFilled.size();
+		
+		level = (linesCleared / 10) + 1;
+		levelLabel.setText("Level: " + (level));
+		
 		lineLabel.setText("Lines Cleared: " + linesCleared);
 		scoreLabel.setText("Score: " + score);
 		if (linesFilled.size() > 0) {
