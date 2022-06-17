@@ -11,9 +11,12 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -33,16 +36,17 @@ public class TetrisUI extends Application {
 	final static int HEIGHT = SIZE * NUM_ROWS;
 	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
 	static Pane screen = new Pane();
+	static String PLAYERNAME;
 	static int score = 0;
 	static int linesCleared = 0;
-	static int level = 1;
+	static int level = 0;
 	static Shape nextShape = spawnShape();
 	static Shape john = spawnShapeOnBoard(nextShape);
 	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
 	static Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
-	
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -57,10 +61,10 @@ public class TetrisUI extends Application {
 		VBox gameStats = new VBox(10);
 		Rectangle statsBoxSize = new Rectangle(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2);
 		gameStats.setShape(statsBoxSize);
-		
+
 		VBox scoreAndLines = new VBox(5);
 		Font labelFont = new Font("Arial", 25);
-		
+
 		Label nextLabel = new Label("NEXT");
 		Font nextLabelFont = new Font("Arial", 40);
 		nextLabel.setTranslateX(SIZE * 2);
@@ -68,7 +72,7 @@ public class TetrisUI extends Application {
 		Rectangle nextBox = new Rectangle(SIZE * 7, SIZE * 4);
 		nextBox.setTranslateY(SIZE * 2);
 		nextBox.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 4;");
-		
+
 		scoreLabel.setFont(labelFont);
 		levelLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
@@ -92,11 +96,42 @@ public class TetrisUI extends Application {
 		screen.getChildren().addAll(separation2, gameScreen, separation, gameStats);
 		gamingMomentSquare.getChildren().addAll(screen);
 		Scene game = new Scene(gamingMomentSquare, WIDTH * 2, HEIGHT);
-		
+
 		nextShape = spawnShape();
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
-		
+
+		VBox inputScreen = new VBox(10);
+		inputScreen.setStyle("-fx-background-color: #97AAE0");
+		inputScreen.setAlignment(Pos.CENTER);
+		Label info = new Label("Enter name 				 Enter Level (0-19)");
+		Label errorMessage = new Label("Please enter a valid level 0-19");
+		HBox playerInputBox = new HBox(20);
+		TextField playerName = new TextField("PlayerName");
+		TextField levelWanted = new TextField("0");
+		playerInputBox.getChildren().addAll(playerName, levelWanted);
+		playerInputBox.setAlignment(Pos.CENTER);
+		Button confirmation = new Button("Confirm");
+		confirmation.setMinSize(200, 50);
+		inputScreen.getChildren().addAll(info, playerInputBox, confirmation);
+		Scene playerInputScene = new Scene(inputScreen, 350, 200);
+		errorMessage.setVisible(false);
+		inputScreen.getChildren().add(errorMessage);
+		errorMessage.setAlignment(Pos.CENTER);
+		confirmation.setOnAction(e -> {
+			if 	(Integer.valueOf(levelWanted.getText()) < 20 && Integer.valueOf(levelWanted.getText()) > -1) {
+				PLAYERNAME = playerName.getText();
+				level = Integer.valueOf(levelWanted.getText());
+				levelLabel.setText(String.valueOf("Level: " + level));
+				stage.setScene(game);
+			}
+			else {
+				errorMessage.setVisible(true);
+				
+			}
+			
+		});
+
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
 				if (isOutBottom(john)) {
@@ -138,18 +173,20 @@ public class TetrisUI extends Application {
 				System.out.println("Level" + level);
 			}
 			if (e.getCode() == KeyCode.Z) {
-				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
+				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
+						&& !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateLeft(john);
 				}
 			}
 			if (e.getCode() == KeyCode.X) {
-				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
+				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
+						&& !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateRight(john);
 				}
 			}
 		});
 
-		stage.setScene(game);
+		stage.setScene(playerInputScene);
 		stage.setTitle("TETRIS");
 		stage.show();
 	}
@@ -246,7 +283,7 @@ public class TetrisUI extends Application {
 	}
 
 	public static Shape spawnShapeOnBoard(Shape block) {
-		
+
 		String shapeType = block.getShapeType();
 		Shape nextShape = block;
 
@@ -255,38 +292,32 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
 			block.setLocation(block.r4, 4 * SIZE, 0 * SIZE);
-		}
-		else if (shapeType.equals("L")) {
+		} else if (shapeType.equals("L")) {
 			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
 			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
 			block.setLocation(block.r4, 5 * SIZE, 0 * SIZE);
-		}
-		else if (shapeType.equals("J")) {
+		} else if (shapeType.equals("J")) {
 			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
 			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r3, 5 * SIZE, 1 * SIZE);
 			block.setLocation(block.r4, 3 * SIZE, 0 * SIZE);
-		}
-		else if (shapeType.equals("O")) {
+		} else if (shapeType.equals("O")) {
 			block.setLocation(block.r1, 4 * SIZE, 0 * SIZE);
 			block.setLocation(block.r2, 5 * SIZE, 0 * SIZE);
 			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
-		}
-		else if (shapeType.equals("I")) {
+		} else if (shapeType.equals("I")) {
 			block.setLocation(block.r1, 6 * SIZE, 0 * SIZE);
 			block.setLocation(block.r2, 5 * SIZE, 0 * SIZE);
 			block.setLocation(block.r3, 4 * SIZE, 0 * SIZE);
 			block.setLocation(block.r4, 3 * SIZE, 0 * SIZE);
-		}
-		else if (shapeType.equals("Z")) {
+		} else if (shapeType.equals("Z")) {
 			block.setLocation(block.r1, 3 * SIZE, 0 * SIZE);
 			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
 			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
-		}
-		else if (shapeType.equals("S")) {
+		} else if (shapeType.equals("S")) {
 			block.setLocation(block.r4, 3 * SIZE, 1 * SIZE);
 			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
@@ -296,7 +327,7 @@ public class TetrisUI extends Application {
 	}
 
 	public static void deleteLines() {
-		ArrayList<Integer> linesFilled = new ArrayList<Integer>(); 
+		ArrayList<Integer> linesFilled = new ArrayList<Integer>();
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
 
@@ -304,8 +335,7 @@ public class TetrisUI extends Application {
 			for (int o = 0; o < tetrisBoard.getMESH()[0].length; o++) {
 				if (tetrisBoard.getMESH()[i][o] == 1) { // If the individual cell is filled or not
 					lineBlocks++;
-				}
-				else {
+				} else {
 					break;
 				}
 			}
@@ -314,31 +344,29 @@ public class TetrisUI extends Application {
 				linesFilled.add(i); // Add the filled row index
 			}
 			lineBlocks = 0;
-			
+
 		}
-		if (linesFilled.size() == 1)	{
-			score += 40*(level);	
-		}
-		else if (linesFilled.size() == 2)	{
-			score += 100*(level);
-		}
-		else if (linesFilled.size() == 3)	{
-			score += 300*(level);
-		}
-		else if (linesFilled.size() == 4)	{
-			score += 1200*(level);
+		if (linesFilled.size() == 1) {
+			score += 40 * (level + 1);
+		} else if (linesFilled.size() == 2) {
+			score += 100 * (level + 1);
+		} else if (linesFilled.size() == 3) {
+			score += 300 * (level + 1);
+		} else if (linesFilled.size() == 4) {
+			score += 1200 * (level + 1);
 		}
 		linesCleared += linesFilled.size();
-		
-		level = (linesCleared / 10) + 1;
+
+		level = (linesCleared / 10);
 		levelLabel.setText("Level: " + (level));
-		
+
 		lineLabel.setText("Lines: " + linesCleared);
 		scoreLabel.setText("Score: " + score);
 		if (linesFilled.size() > 0) {
 			do {
 				for (Node block : screen.getChildren()) { // Gets all of the rectangles that are in the
-					if (block instanceof Rectangle && ((Rectangle) block).getX() < WIDTH) {// Filter out the Rectangles (Just in case)
+					if (block instanceof Rectangle && ((Rectangle) block).getX() < WIDTH) {// Filter out the Rectangles
+																							// (Just in case)
 						blocks.add(block);
 					}
 				}
@@ -346,15 +374,15 @@ public class TetrisUI extends Application {
 				for (Node block : blocks) {
 					Rectangle tempBlock = (Rectangle) block;
 					if (tempBlock.getY() == linesFilled.get(0) * SIZE) {
-						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
+						tetrisBoard.getMESH()[(int) (tempBlock.getY() / SIZE)][(int) (tempBlock.getX() / SIZE)] = 0;
 						screen.getChildren().remove(block);
-					} 	
+					}
 				}
-				
+
 				for (Node block : blocks) {
 					Rectangle tempBlock = (Rectangle) block;
-					if (tempBlock.getY() < linesFilled.get(0)*SIZE && tempBlock.getX() < WIDTH) {
-						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 0;
+					if (tempBlock.getY() < linesFilled.get(0) * SIZE && tempBlock.getX() < WIDTH) {
+						tetrisBoard.getMESH()[(int) (tempBlock.getY() / SIZE)][(int) (tempBlock.getX() / SIZE)] = 0;
 						tempBlock.setY(tempBlock.getY() + SIZE);
 					}
 				}
@@ -362,49 +390,47 @@ public class TetrisUI extends Application {
 				linesFilled.remove(0);
 				blocks.clear();
 				for (Node block : screen.getChildren()) { // Gets all of the rectangles that are in the
-					if (block instanceof Rectangle && ((Rectangle) block).getX() < WIDTH) {// Filter out the Rectangles (Just in case)
+					if (block instanceof Rectangle && ((Rectangle) block).getX() < WIDTH) {// Filter out the Rectangles
+																							// (Just in case)
 						Rectangle tempBlock = (Rectangle) block;
-						tetrisBoard.getMESH()[(int) (tempBlock.getY()/SIZE)][(int) (tempBlock.getX()/SIZE)] = 1;
+						tetrisBoard.getMESH()[(int) (tempBlock.getY() / SIZE)][(int) (tempBlock.getX() / SIZE)] = 1;
 					}
 				}
 
-		} while (linesFilled.size() > 0); 
+			} while (linesFilled.size() > 0);
 		}
 		john = spawnShapeOnBoard(nextShape);
 		nextShape = spawnShape();
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 	}
-	
-	public boolean isOutLeft (Shape block) {
+
+	public boolean isOutLeft(Shape block) {
 		if ((block.r1.getX() - SIZE) >= 0 && (block.r2.getX() - SIZE) >= 0 && (block.r3.getX() - SIZE) >= 0
 				&& (block.r4.getX() - SIZE) >= 0 && !tetrisBoard.checkLeft(block)) {
 			return false;
 		}
 		return true;
 	}
-	
-	public boolean isOutRight (Shape block) {
-		if ((block.r1.getX() + SIZE) < WIDTH && (block.r2.getX() + SIZE) < WIDTH
-				&& (block.r3.getX() + SIZE) < WIDTH && (block.r4.getX() + SIZE) < WIDTH
-				&& !tetrisBoard.checkRight(block)) {
+
+	public boolean isOutRight(Shape block) {
+		if ((block.r1.getX() + SIZE) < WIDTH && (block.r2.getX() + SIZE) < WIDTH && (block.r3.getX() + SIZE) < WIDTH
+				&& (block.r4.getX() + SIZE) < WIDTH && !tetrisBoard.checkRight(block)) {
 			return false;
 		}
 		return true;
 	}
-	
-	public boolean isOutTop (Shape block) {
-		if ((block.r1.getY() - SIZE) >= 0 && (block.r2.getY() - SIZE) >= 0
-				&& (block.r3.getY() - SIZE) >= 0 && (block.r4.getY() - SIZE) >= 0
-				&& !tetrisBoard.checkDown(block)) {
+
+	public boolean isOutTop(Shape block) {
+		if ((block.r1.getY() - SIZE) >= 0 && (block.r2.getY() - SIZE) >= 0 && (block.r3.getY() - SIZE) >= 0
+				&& (block.r4.getY() - SIZE) >= 0 && !tetrisBoard.checkDown(block)) {
 			return false;
 		}
 		return true;
 	}
-	
-	public static boolean isOutBottom (Shape block) {
-		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT
-				&& (block.r3.getY() + SIZE) < HEIGHT && (block.r4.getY() + SIZE) < HEIGHT
-				&& !tetrisBoard.checkDown(block)) {
+
+	public static boolean isOutBottom(Shape block) {
+		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT && (block.r3.getY() + SIZE) < HEIGHT
+				&& (block.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(block)) {
 			return false;
 		}
 		return true;
