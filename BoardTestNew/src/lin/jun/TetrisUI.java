@@ -96,8 +96,6 @@ public class TetrisUI extends Application {
 		nextShape = spawnShape();
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
-
-		fallPiece(1000);
 		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
@@ -140,8 +138,7 @@ public class TetrisUI extends Application {
 				System.out.println("Level" + level);
 			}
 			if (e.getCode() == KeyCode.Z) {
-				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH 
-						&& (john.r2.getY() - SIZE) >= 0 && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
+				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT && !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateLeft(john);
 				}
 			}
@@ -162,7 +159,7 @@ public class TetrisUI extends Application {
 		launch(args);
 	}
 
-	public static void fallPiece(int seconds) {
+	public static void fallPiece() {
 		TimerTask fall = new TimerTask() {
 			public void run() {
 				if (isOutBottom(john)) {
@@ -178,9 +175,8 @@ public class TetrisUI extends Application {
 				}
 			}
 		};
-
 		Timer time = new Timer();
-		time.scheduleAtFixedRate(fall, seconds, seconds);
+		time.scheduleAtFixedRate(fall, 950, 950);
 	}
 
 	public static Shape spawnShape() {
