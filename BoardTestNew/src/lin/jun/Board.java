@@ -109,6 +109,13 @@ public class Board {
 						|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE] == 1
 						|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE] == 1);
 			}
+			else if (block.getShapeType().equals("I")) {
+				return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
+						|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1
+						|| MESH[(int)block.r2.getY()/SIZE - 1][(int)block.r2.getX()/SIZE] == 1
+						|| MESH[(int)block.r2.getY()/SIZE + 1][(int)block.r2.getX()/SIZE] == 1
+						|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 2] == 1);
+			}
 			else {
 				return (MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE - 1] == 1
 						|| MESH[(int)block.r2.getY()/SIZE][(int)block.r2.getX()/SIZE + 1] == 1

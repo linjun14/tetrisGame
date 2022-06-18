@@ -45,7 +45,7 @@ public class TetrisUI extends Application {
 	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
-	static int fallSpeed = 1000;
+	static int fallSpeed;
 	static Timer time = new Timer();
 	static TimerTask fall;
 	static Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
@@ -192,13 +192,25 @@ public class TetrisUI extends Application {
 				deleteLines();
 			}
 			if (e.getCode() == KeyCode.Z) {
-				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
+				if (john.getShapeType().equals("I")) {
+					if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT 
+							&& (john.r2.getX() - SIZE * 2) >= 0 && !tetrisBoard.checkRotationPoint(john)){
+						control.rotateLeft(john);
+					}
+				}
+				else if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
 						&& !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateLeft(john);
 				}
 			}
 			if (e.getCode() == KeyCode.X) {
-				if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
+				if (john.getShapeType().equals("I")) {
+					if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
+							&& (john.r2.getX() - SIZE * 2) >= 0 && !tetrisBoard.checkRotationPoint(john)) {
+						control.rotateRight(john);
+					}
+				}
+				else if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
 						&& !tetrisBoard.checkRotationPoint(john)) {
 					control.rotateRight(john);
 				}
@@ -220,6 +232,34 @@ public class TetrisUI extends Application {
 	}
 	
 	public static void initialFallPiece() {
+		if (level <= 8) {
+			fallSpeed = 1000 - 104 * level;
+		}
+		else if (level == 9) {
+			fallSpeed = 125;
+		}
+		else if (level <= 12) {
+			fallSpeed = 104;
+		}
+		else if (level <= 15) {
+			fallSpeed = 84;
+		}
+		else if (level <= 18) {
+			fallSpeed = 64;
+		}
+		else {
+			fallSpeed = 42;
+		}
+		time.schedule(fall, 2000, fallSpeed);
+	}
+	
+	public static void changeSpeed() {
+		if (level == 1) {
+			fallSpeed = 800;
+		}
+		time.cancel();
+		time.purge();
+		time = new Timer();
 		time.schedule(fall, fallSpeed, fallSpeed);
 	}
 	
@@ -365,6 +405,7 @@ public class TetrisUI extends Application {
 		
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
+			changeSpeed();
 		}
 		levelLabel.setText("Level: " + (level));
 
