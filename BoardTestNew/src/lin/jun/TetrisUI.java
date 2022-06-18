@@ -40,11 +40,13 @@ public class TetrisUI extends Application {
 	static int score = 0;
 	static int linesCleared = 0;
 	static int level = 0;
+	static int droughtCounter = 0;
 	static Shape nextShape = spawnShape();
 	static Shape john = spawnShapeOnBoard(nextShape);
 	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
+	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
 	static int fallSpeed;
 	static Timer time = new Timer();
 	static TimerTask fall;
@@ -66,21 +68,20 @@ public class TetrisUI extends Application {
 		gameStats.setShape(statsBoxSize);
 
 		VBox scoreAndLines = new VBox(5);
-		Font labelFont = new Font("Arial", 25);
+		Font labelFont = new Font("Arial", SIZE);
 
 		Label nextLabel = new Label("NEXT");
-		Font nextLabelFont = new Font("Arial", 40);
-		nextLabel.setTranslateX(SIZE * 2);
-		nextLabel.setTranslateY(SIZE * 2);
-		Rectangle nextBox = new Rectangle(SIZE * 7, SIZE * 4);
-		nextBox.setTranslateY(SIZE * 2);
-		nextBox.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 4;");
-
+		Font nextLabelFont = new Font("Arial", SIZE);
+		nextLabel.setTranslateX(SIZE);
+		nextLabel.setTranslateY(SIZE);
+		droughtCount.setTranslateY(SIZE * 5);
+		
 		scoreLabel.setFont(labelFont);
 		levelLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
 		nextLabel.setFont(nextLabelFont);
-		scoreAndLines.getChildren().addAll(levelLabel, scoreLabel, lineLabel, nextLabel, nextBox);
+		droughtCount.setFont(labelFont);
+		scoreAndLines.getChildren().addAll(levelLabel, scoreLabel, lineLabel, nextLabel, droughtCount);
 
 		VBox pieceCounts = new VBox(5);
 
@@ -253,16 +254,6 @@ public class TetrisUI extends Application {
 		time.schedule(fall, 2000, fallSpeed);
 	}
 	
-	public static void changeSpeed() {
-		if (level == 1) {
-			fallSpeed = 800;
-		}
-		time.cancel();
-		time.purge();
-		time = new Timer();
-		time.schedule(fall, fallSpeed, fallSpeed);
-	}
-	
 	public static Shape spawnShape() {
 
 		Random rand = new Random();
@@ -278,52 +269,59 @@ public class TetrisUI extends Application {
 		switch (shapeType + 1) {
 		case 1:
 			block = new Shape(a, b, c, d, "T");
-			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
-			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r1, 11 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 12 * SIZE, 8 * SIZE);
+			droughtCounter++;
 			break;
 		case 2:
 			block = new Shape(a, b, c, d, "L");
-			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
-			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 14 * SIZE, 8 * SIZE);
+			block.setLocation(block.r1, 11 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 13 * SIZE, 8 * SIZE);
+			droughtCounter++;
 			break;
 		case 3:
 			block = new Shape(a, b, c, d, "J");
-			block.setLocation(block.r1, 12 * SIZE, 9 * SIZE);
-			block.setLocation(block.r2, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r3, 14 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r1, 11 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 13 * SIZE, 8 * SIZE);
+			droughtCounter++;
 			break;
 		case 4:
 			block = new Shape(a, b, c, d, "O");
-			block.setLocation(block.r1, 13 * SIZE, 8 * SIZE);
-			block.setLocation(block.r2, 14 * SIZE, 8 * SIZE);
-			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 14 * SIZE, 9 * SIZE);
+			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r3, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 13 * SIZE, 9 * SIZE);
+			droughtCounter++;
 			break;
 		case 5:
 			block = new Shape(a, b, c, d, "I");
-			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
-			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
-			block.setLocation(block.r3, 14 * SIZE, 8 * SIZE);
-			block.setLocation(block.r4, 15 * SIZE, 8 * SIZE);
+			block.setLocation(block.r1, 11 * SIZE, 8 * SIZE);
+			block.setLocation(block.r2, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r3, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r4, 14 * SIZE, 8 * SIZE);
+			droughtCounter = 0;
 			break;
 		case 6:
 			block = new Shape(a, b, c, d, "Z");
-			block.setLocation(block.r1, 12 * SIZE, 8 * SIZE);
-			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
-			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 14 * SIZE, 9 * SIZE);
+			block.setLocation(block.r1, 11 * SIZE, 8 * SIZE);
+			block.setLocation(block.r2, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r3, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r4, 13 * SIZE, 9 * SIZE);
+			droughtCounter++;
 			break;
 		case 7:
 			block = new Shape(a, b, c, d, "S");
-			block.setLocation(block.r4, 12 * SIZE, 9 * SIZE);
-			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r2, 13 * SIZE, 8 * SIZE);
-			block.setLocation(block.r1, 14 * SIZE, 8 * SIZE);
+			block.setLocation(block.r4, 11 * SIZE, 9 * SIZE);
+			block.setLocation(block.r3, 12 * SIZE, 9 * SIZE);
+			block.setLocation(block.r2, 12 * SIZE, 8 * SIZE);
+			block.setLocation(block.r1, 13 * SIZE, 8 * SIZE);
+			droughtCounter++;
 			break;
 		}
 		return block;
@@ -405,7 +403,6 @@ public class TetrisUI extends Application {
 		
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
-			changeSpeed();
 		}
 		levelLabel.setText("Level: " + (level));
 
@@ -449,6 +446,7 @@ public class TetrisUI extends Application {
 			} while (linesFilled.size() > 0);
 		}
 		john = spawnShapeOnBoard(nextShape);
+		droughtCount.setText("Longbar drought:" + droughtCounter);
 		nextShape = spawnShape();
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 	}
