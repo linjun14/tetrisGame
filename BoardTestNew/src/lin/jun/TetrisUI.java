@@ -41,6 +41,7 @@ public class TetrisUI extends Application {
 	static int linesCleared = 0;
 	static int level = 0;
 	static int droughtCounter = 0;
+	static int highScore = 0;
 	static Shape nextShape = spawnShape();
 	static Shape john = spawnShapeOnBoard(nextShape);
 	static Label levelLabel = new Label("Level: " + level);
@@ -435,6 +436,7 @@ public class TetrisUI extends Application {
 
 			} while (linesFilled.size() > 0);
 		}
+		
 		john = spawnShapeOnBoard(nextShape);
 		droughtCount.setText("Longbar drought:" + droughtCounter);
 		nextShape = spawnShape();
