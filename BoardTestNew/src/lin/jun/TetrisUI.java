@@ -152,17 +152,17 @@ public class TetrisUI extends Application {
 					scoreLabel.setText("Score: " + score);
 				}
 			}
-			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
+			else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
 				if (!isOutLeft(john)) {
 					control.moveLeft(john);
 				}
 			}
-			if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
+			else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
 				if (!isOutRight(john)) {
 					control.moveRight(john);
 				}
 			}
-			if (e.getCode() == KeyCode.SPACE) {
+			else if (e.getCode() == KeyCode.SPACE) {
 				while (!isOutBottom(john)) {
 					control.moveDown(john);
 					score += 2;
@@ -175,7 +175,7 @@ public class TetrisUI extends Application {
 				control.resetRotation();
 				deleteLines();
 			}
-			if (e.getCode() == KeyCode.Z) {
+			else if (e.getCode() == KeyCode.Z) {
 				if (john.getShapeType().equals("I")) {
 					if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT 
 							&& (john.r2.getX() - SIZE * 2) >= 0 && !tetrisBoard.checkRotationPoint(john)){
@@ -189,7 +189,7 @@ public class TetrisUI extends Application {
 					System.out.println(control.getRotation());
 				}
 			}
-			if (e.getCode() == KeyCode.X) {
+			else if (e.getCode() == KeyCode.X) {
 				if (john.getShapeType().equals("I")) {
 					if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
 							&& (john.r2.getX() - SIZE * 2) >= 0 && !tetrisBoard.checkRotationPoint(john)) {
