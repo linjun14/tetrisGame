@@ -48,8 +48,7 @@ public class TetrisUI extends Application {
 	static Label lineLabel = new Label("Lines: " + linesCleared);
 	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
 	static int fallSpeed;
-	static Timer time = new Timer();
-	static TimerTask fall;
+	static Timer time;
 	static Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
 
 	@Override
@@ -104,22 +103,6 @@ public class TetrisUI extends Application {
 		nextShape = spawnShape();
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
-
-		fall = new TimerTask() {
-			public void run() {
-				if (isOutBottom(john)) {
-					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
-					control.resetRotation();
-					Platform.runLater(() -> deleteLines());
-					// tetrisBoard.displayBoard();
-				} else {
-					control.moveDown(john);
-				}
-			}
-		};
 		
 		VBox inputScreen = new VBox(10);
 		inputScreen.setStyle("-fx-background-color: #97AAE0");
@@ -227,12 +210,9 @@ public class TetrisUI extends Application {
 		// TODO Auto-generated method stub
 		launch(args);
 	}
-
-	public static TimerTask getTask() {
-		return fall;
-	}
 	
 	public static void initialFallPiece() {
+		time = new Timer();
 		if (level <= 8) {
 			fallSpeed = 1000 - 104 * level;
 		}
@@ -251,7 +231,55 @@ public class TetrisUI extends Application {
 		else {
 			fallSpeed = 42;
 		}
-		time.schedule(fall, 2000, fallSpeed);
+		time.schedule(new TimerTask() {
+			public void run() {
+				if (isOutBottom(john)) {
+					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
+					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
+					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
+					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+					control.resetRotation();
+					Platform.runLater(() -> deleteLines());
+					// tetrisBoard.displayBoard();
+				} else {
+					control.moveDown(john);
+				}
+			}
+		} , 2000, fallSpeed);
+	}
+
+	public static void changeSpeed() {
+		time.cancel();
+		time = new Timer();
+		
+		if (level <= 8) {
+			fallSpeed = 1000 - 104 * level;
+		}
+		else if (level == 9) {
+			fallSpeed = 125;
+		}
+		else if (level <= 12) {
+			fallSpeed = 104;
+		}
+		else if (level <= 15) {
+			fallSpeed = 84;
+		}
+		else if (level <= 18) {
+			fallSpeed = 64;
+		}
+		else {
+			fallSpeed = 42;
+		}
+		
+		time.schedule(new TimerTask() {
+			public void run() {
+				if (isOutBottom(john)) {
+					control.resetRotation();
+				} else {
+					control.moveDown(john);
+				}
+			}
+		} , 0, fallSpeed);
 	}
 	
 	public static Shape spawnShape() {
@@ -288,7 +316,7 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r1, 11 * SIZE, 9 * SIZE);
 			block.setLocation(block.r2, 12 * SIZE, 9 * SIZE);
 			block.setLocation(block.r3, 13 * SIZE, 9 * SIZE);
-			block.setLocation(block.r4, 13 * SIZE, 8 * SIZE);
+			block.setLocation(block.r4, 11 * SIZE, 8 * SIZE);
 			droughtCounter++;
 			break;
 		case 4:
@@ -403,6 +431,7 @@ public class TetrisUI extends Application {
 		
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
+			changeSpeed();
 		}
 		levelLabel.setText("Level: " + (level));
 
