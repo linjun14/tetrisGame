@@ -70,17 +70,23 @@ public class TetrisUI extends Application {
 		Font labelFont = new Font("Arial", SIZE);
 
 		Label nextLabel = new Label("NEXT");
+		Label controlContent = new Label("************CONTROLS************ \n LEFT ARROW - MOVE LEFT \n RIGHT ARROW - MOVE RIGHT \n DOWN ARROW - MOVE DOWN "
+										+ "\n SPACE - HARD DROP \n Z - ROTATE LEFT \n X - ROTATE RIGHT");
 		Font nextLabelFont = new Font("Arial", SIZE);
+		Font contentFont = new Font ("Arial", SIZE/2);
 		nextLabel.setTranslateX(SIZE);
 		nextLabel.setTranslateY(SIZE);
 		droughtCount.setTranslateY(SIZE * 5);
+		controlContent.setTranslateY(SIZE * 6);
 		
 		scoreLabel.setFont(labelFont);
 		levelLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
 		nextLabel.setFont(nextLabelFont);
 		droughtCount.setFont(labelFont);
-		scoreAndLines.getChildren().addAll(levelLabel, scoreLabel, lineLabel, nextLabel, droughtCount);
+		controlContent.setFont(contentFont);
+		
+		scoreAndLines.getChildren().addAll(levelLabel, scoreLabel, lineLabel, nextLabel, droughtCount, controlContent);
 
 		VBox pieceCounts = new VBox(5);
 
@@ -127,7 +133,7 @@ public class TetrisUI extends Application {
 				level = Integer.valueOf(levelWanted.getText());
 				levelLabel.setText(String.valueOf("Level: " + level));
 				stage.setScene(game);
-				initialFallPiece();
+				changeSpeed();
 			}
 			else {
 				errorMessage.setVisible(true);
@@ -176,31 +182,13 @@ public class TetrisUI extends Application {
 				deleteLines();
 			}
 			else if (e.getCode() == KeyCode.Z) {
-				if (john.getShapeType().equals("I")) {
-					if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT 
-							&& (john.r2.getX() - SIZE * 2) >= 0 && !tetrisBoard.checkRotationPoint(john)){
-						control.rotateLeft(john);
-						System.out.println(control.getRotation());
-					}
-				}
-				else if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
-						&& !tetrisBoard.checkRotationPoint(john)) {
+				if (isRotate(john)) {
 					control.rotateLeft(john);
-					System.out.println(control.getRotation());
 				}
 			}
 			else if (e.getCode() == KeyCode.X) {
-				if (john.getShapeType().equals("I")) {
-					if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
-							&& (john.r2.getX() - SIZE * 2) >= 0 && !tetrisBoard.checkRotationPoint(john)) {
-						control.rotateRight(john);
-						System.out.println(control.getRotation());
-					}
-				}
-				else if ((john.r2.getX() - SIZE) >= 0 && (john.r2.getX() + SIZE) < WIDTH && (john.r2.getY() + SIZE) < HEIGHT
-						&& !tetrisBoard.checkRotationPoint(john)) {
+				if (isRotate(john)) {
 					control.rotateRight(john);
-					System.out.println(control.getRotation());
 				}
 			}
 		});
@@ -215,16 +203,17 @@ public class TetrisUI extends Application {
 		launch(args);
 	}
 	
-	public static void initialFallPiece() {
+	public static void changeSpeed() {
 		time = new Timer();
+		
 		if (level <= 8) {
-			fallSpeed = 1000 - 104 * level;
+			fallSpeed = 1000 - 100 * level;
 		}
 		else if (level == 9) {
-			fallSpeed = 125;
+			fallSpeed = 148;
 		}
 		else if (level <= 12) {
-			fallSpeed = 104;
+			fallSpeed = 107;
 		}
 		else if (level <= 15) {
 			fallSpeed = 84;
@@ -235,6 +224,7 @@ public class TetrisUI extends Application {
 		else {
 			fallSpeed = 42;
 		}
+		
 		time.schedule(new TimerTask() {
 			public void run() {
 				if (isOutBottom(john)) {
@@ -245,40 +235,6 @@ public class TetrisUI extends Application {
 					control.resetRotation();
 					Platform.runLater(() -> deleteLines());
 					// tetrisBoard.displayBoard();
-				} else {
-					control.moveDown(john);
-				}
-			}
-		} , 2000, fallSpeed);
-	}
-
-	public static void changeSpeed() {
-		time.cancel();
-		time = new Timer();
-		
-		if (level <= 8) {
-			fallSpeed = 1000 - 104 * level;
-		}
-		else if (level == 9) {
-			fallSpeed = 125;
-		}
-		else if (level <= 12) {
-			fallSpeed = 104;
-		}
-		else if (level <= 15) {
-			fallSpeed = 84;
-		}
-		else if (level <= 18) {
-			fallSpeed = 64;
-		}
-		else {
-			fallSpeed = 42;
-		}
-		
-		time.schedule(new TimerTask() {
-			public void run() {
-				if (isOutBottom(john)) {
-					control.resetRotation();
 				} else {
 					control.moveDown(john);
 				}
@@ -435,6 +391,7 @@ public class TetrisUI extends Application {
 		
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
+			time.cancel();
 			changeSpeed();
 		}
 		levelLabel.setText("Level: " + (level));
@@ -514,5 +471,16 @@ public class TetrisUI extends Application {
 			return false;
 		}
 		return true;
+	}
+	
+	public static boolean isRotate(Shape block) {
+		if (block.getShapeType().equals("I")) {
+			return ((block.r2.getX() - SIZE) >= 0 && (block.r2.getX() + SIZE) < WIDTH && (block.r2.getY() + SIZE) < HEIGHT
+					&& (block.r2.getX() - SIZE * 2) >= 0 && (block.r2.getY() + SIZE * 2) < HEIGHT && !tetrisBoard.checkRotationPoint(block));
+		}
+		else {
+			return ((block.r2.getX() - SIZE) >= 0 && (block.r2.getX() + SIZE) < WIDTH && (block.r2.getY() + SIZE) < HEIGHT
+					&& !tetrisBoard.checkRotationPoint(block));
+		}
 	}
 }
