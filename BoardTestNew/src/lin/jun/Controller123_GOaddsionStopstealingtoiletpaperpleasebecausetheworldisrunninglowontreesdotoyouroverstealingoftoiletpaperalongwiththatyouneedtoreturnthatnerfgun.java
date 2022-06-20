@@ -338,4 +338,9 @@ public class Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworld
 	public void resetRotation() {
 		rotation = 1;
 	}
+
+	public int getRotation() {
+		// TODO Auto-generated method stub
+		return rotation;
+	}
 }

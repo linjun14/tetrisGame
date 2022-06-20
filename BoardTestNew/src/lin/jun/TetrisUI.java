@@ -138,15 +138,7 @@ public class TetrisUI extends Application {
 
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-				if (isOutBottom(john)) {
-					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
-					control.resetRotation();
-					deleteLines();
-					// tetrisBoard.displayBoard();
-				} else {
+				if (!isOutBottom(john)) {
 					control.moveDown(john);
 					score += 1;
 					scoreLabel.setText("Score: " + score);
@@ -168,12 +160,6 @@ public class TetrisUI extends Application {
 					score += 2;
 					scoreLabel.setText("Score: " + score);
 				}
-				tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-				tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-				tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
-				control.resetRotation();
-				deleteLines();
 			}
 			if (e.getCode() == KeyCode.Z) {
 				if (john.getShapeType().equals("I")) {
@@ -233,11 +219,8 @@ public class TetrisUI extends Application {
 		}
 		time.schedule(new TimerTask() {
 			public void run() {
+				System.out.println(control.getRotation());
 				if (isOutBottom(john)) {
-					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 					control.resetRotation();
 					Platform.runLater(() -> deleteLines());
 					// tetrisBoard.displayBoard();
@@ -275,11 +258,13 @@ public class TetrisUI extends Application {
 			public void run() {
 				if (isOutBottom(john)) {
 					control.resetRotation();
+					Platform.runLater(() -> deleteLines());
+					// tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
 				}
 			}
-		} , 0, fallSpeed);
+		} ,0, fallSpeed);
 	}
 	
 	public static Shape spawnShape() {
@@ -400,6 +385,12 @@ public class TetrisUI extends Application {
 	}
 
 	public static void deleteLines() {
+		
+		tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
+		tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
+		tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
+		tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+		
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>();
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
