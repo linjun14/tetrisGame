@@ -50,6 +50,7 @@ public class TetrisUI extends Application {
 	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
 	static int fallSpeed;
 	static Timer time;
+	static boolean go = false;
 	static Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
 
 	@Override
@@ -151,7 +152,8 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 					control.resetRotation();
-					deleteLines();
+					time.cancel();
+					changeSpeed();
 					// tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(john);
@@ -180,7 +182,8 @@ public class TetrisUI extends Application {
 				tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 				control.resetRotation();
-				deleteLines();
+				time.cancel();
+				changeSpeed();
 			}
 			else if (e.getCode() == KeyCode.Z) {
 				if (isRotate(john)) {
@@ -193,7 +196,7 @@ public class TetrisUI extends Application {
 				}
 			}
 		});
-
+		
 		stage.setScene(playerInputScene);
 		stage.setTitle("TETRIS");
 		stage.show();
@@ -225,19 +228,31 @@ public class TetrisUI extends Application {
 		else {
 			fallSpeed = 42;
 		}
-		
 		time.schedule(new TimerTask() {
 			public void run() {
-				if (isOutBottom(john)) {
-					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
-					control.resetRotation();
-					Platform.runLater(() -> deleteLines());
-					// tetrisBoard.displayBoard();
-				} else {
-					control.moveDown(john);
+				if (tetrisBoard.isTopOut(john)) {
+					System.out.println("john li");
+					time.cancel();
+				}
+				else {
+					if (isOutBottom(john)) {
+						tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
+						tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
+						tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
+						tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+						control.resetRotation();
+						Platform.runLater(() -> deleteLines());
+						go = false;
+						// tetrisBoard.displayBoard();
+					} 
+					else {
+						if (go) {
+							control.moveDown(john);
+						}
+						else {
+							go = true;
+						}
+					}
 				}
 			}
 		} , 0, fallSpeed);
@@ -361,6 +376,7 @@ public class TetrisUI extends Application {
 	}
 
 	public static void deleteLines() {
+		time.cancel();
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>();
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
@@ -392,8 +408,6 @@ public class TetrisUI extends Application {
 		
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
-			time.cancel();
-			changeSpeed();
 		}
 		levelLabel.setText("Level: " + (level));
 
@@ -437,10 +451,13 @@ public class TetrisUI extends Application {
 			} while (linesFilled.size() > 0);
 		}
 		
+		control.resetRotation();
 		john = spawnShapeOnBoard(nextShape);
 		droughtCount.setText("Longbar drought:" + droughtCounter);
 		nextShape = spawnShape();
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
+		
+		changeSpeed();
 	}
 
 	public boolean isOutLeft(Shape block) {
@@ -485,4 +502,4 @@ public class TetrisUI extends Application {
 					&& !tetrisBoard.checkRotationPoint(block));
 		}
 	}
-}
+ }
