@@ -1,5 +1,10 @@
 package lin.jun;
 
+/**
+ * The text version of the game board
+ * @author Jun Lin
+ * @author Kenneth Ou
+ */
 public class Board {
 	
 	final int rows;
@@ -9,12 +14,20 @@ public class Board {
 	static int [][] MESH;
 	static int SIZE = TetrisUI.SIZE;
 	
+	/**
+	 * Constructor for the Board class
+	 * @param rows number of rows
+	 * @param cols number of columns
+	 */
 	public Board(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
 		MESH = new int[rows][cols];
 	}
 	
+	/**
+	 * Displays the text version of the game board
+	 */
 	public void displayBoard() {
 		for(int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
@@ -24,6 +37,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Clears the whole game board
+	 */
 	public void clearBoard() {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
@@ -31,9 +47,11 @@ public class Board {
 			}
 		}
 	}
+
 	public int[][] getMESH(){
 		return MESH;
 	}
+	
 	public void fillCell(int r, int c) {
 		MESH[r][c] = 1;
 	}
@@ -53,7 +71,7 @@ public class Board {
 			count = 1;
 		}
 	}
-	
+
 	public boolean isTopOut(Shape block) {
 		for (int i : MESH[0]) {
 			if (i == 1) {

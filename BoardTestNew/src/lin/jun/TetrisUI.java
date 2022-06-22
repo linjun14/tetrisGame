@@ -5,21 +5,23 @@ import java.util.Collection;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -27,6 +29,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * A simulation of the classic Tetris game
+ * @author Jun Lin
+ * @author Kenneth Ou
+ */
 public class TetrisUI extends Application {
 
 	final static int NUM_ROWS = 20;
@@ -47,22 +54,24 @@ public class TetrisUI extends Application {
 	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
+	static Label highScoreLabel = new Label ("Highscore: " + highScore);
 	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
+	static Button restart = new Button("RESTART");
 	static int fallSpeed;
 	static Timer time;
 	static boolean go = false;
-	static Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun control = new Controller123_GOaddsionStopstealingtoiletpaperpleasebecausetheworldisrunninglowontreesdotoyouroverstealingoftoiletpaperalongwiththatyouneedtoreturnthatnerfgun();
+	static Controller control = new Controller();
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
-		StackPane gamingMomentSquare = new StackPane();
+		StackPane gameScreen = new StackPane();
 		Line separation = new Line(WIDTH, 0, WIDTH, HEIGHT);
 		Line separation2 = new Line(0, 0, WIDTH, HEIGHT);
-		GridPane gameScreen = new GridPane();
-
+		GridPane gameBackground = new GridPane();
+		
 		Rectangle gameRect = new Rectangle(0, 0, WIDTH, HEIGHT);
-		gameScreen.setShape(gameRect);
+		gameBackground.setShape(gameRect);
 
 		VBox gameStats = new VBox(10);
 		Rectangle statsBoxSize = new Rectangle(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2);
@@ -74,21 +83,25 @@ public class TetrisUI extends Application {
 		Label nextLabel = new Label("NEXT");
 		Label controlContent = new Label("************CONTROLS************ \n LEFT ARROW - MOVE LEFT \n RIGHT ARROW - MOVE RIGHT \n DOWN ARROW - MOVE DOWN "
 										+ "\n SPACE - HARD DROP \n Z - ROTATE LEFT \n X - ROTATE RIGHT");
-		Font nextLabelFont = new Font("Arial", SIZE);
 		Font contentFont = new Font ("Arial", SIZE/2);
+		
+		highScoreLabel.setFont(labelFont);
 		nextLabel.setTranslateX(SIZE);
 		nextLabel.setTranslateY(SIZE);
-		droughtCount.setTranslateY(SIZE * 5);
-		controlContent.setTranslateY(SIZE * 6);
+		droughtCount.setTranslateY(SIZE * 4);
+		controlContent.setTranslateY(SIZE * 4.5);
 		
 		scoreLabel.setFont(labelFont);
 		levelLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
-		nextLabel.setFont(nextLabelFont);
+		nextLabel.setFont(labelFont);
 		droughtCount.setFont(labelFont);
 		controlContent.setFont(contentFont);
 		
-		scoreAndLines.getChildren().addAll(levelLabel, scoreLabel, lineLabel, nextLabel, droughtCount, controlContent);
+		restart.setFont(labelFont);
+		restart.setTranslateY(SIZE * 5);
+		
+		scoreAndLines.getChildren().addAll(highScoreLabel, scoreLabel, levelLabel, lineLabel, nextLabel, droughtCount, controlContent, restart);
 
 		VBox pieceCounts = new VBox(5);
 
@@ -100,13 +113,13 @@ public class TetrisUI extends Application {
 			for (int c = 0; c < NUM_COLS; c++) {
 				Rectangle square = new Rectangle(SIZE - 1, SIZE - 1);
 				square.setStyle("-fx-fill: #F1F2F5; -fx-stroke: white; -fx-stroke-width: 1;");
-				gameScreen.add(square, c, r);
+				gameBackground.add(square, c, r);
 			}
 		}
-		gameScreen.setAlignment(Pos.CENTER);
-		screen.getChildren().addAll(separation2, gameScreen, separation, gameStats);
-		gamingMomentSquare.getChildren().addAll(screen);
-		Scene game = new Scene(gamingMomentSquare, WIDTH * 2, HEIGHT);
+		gameBackground.setAlignment(Pos.CENTER);
+		screen.getChildren().addAll(separation2, gameBackground, separation, gameStats);
+		gameScreen.getChildren().addAll(screen);
+		Scene game = new Scene(gameScreen, WIDTH * 2, HEIGHT);
 
 		nextShape = spawnShape();
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
@@ -125,6 +138,7 @@ public class TetrisUI extends Application {
 		Button confirmation = new Button("Confirm");
 		confirmation.setMinSize(200, 50);
 		inputScreen.getChildren().addAll(info, playerInputBox, confirmation);
+		
 		Scene playerInputScene = new Scene(inputScreen, 350, 200);
 		errorMessage.setVisible(false);
 		inputScreen.getChildren().add(errorMessage);
@@ -134,16 +148,26 @@ public class TetrisUI extends Application {
 				PLAYERNAME = playerName.getText();
 				level = Integer.valueOf(levelWanted.getText());
 				levelLabel.setText(String.valueOf("Level: " + level));
+				restart.setVisible(false);
 				stage.setScene(game);
 				changeSpeed();
 			}
 			else {
 				errorMessage.setVisible(true);
-				
 			}
-			
 		});
 
+		restart.setOnAction(e -> {
+			stage.setScene(playerInputScene);
+			tetrisBoard.clearBoard();
+			score = 0;
+			linesCleared = 0;
+			droughtCounter = 0;
+			scoreLabel.setText("Score: " + score);
+			lineLabel.setText("Lines: " + linesCleared);
+			droughtCount.setText("Longbar drought:"+ droughtCounter);
+		});
+		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
 				if (isOutBottom(john)) {
@@ -207,6 +231,9 @@ public class TetrisUI extends Application {
 		launch(args);
 	}
 	
+	/**
+	 * Changes the auto drop speed based on the level
+	 */
 	public static void changeSpeed() {
 		time = new Timer();
 		
@@ -231,7 +258,17 @@ public class TetrisUI extends Application {
 		time.schedule(new TimerTask() {
 			public void run() {
 				if (tetrisBoard.isTopOut(john)) {
-					System.out.println("john li");
+					Platform.runLater(() -> {
+						if (score > highScore) {
+							highScore = score;
+							highScoreLabel.setText("Highscore: " + highScore);
+						}
+						Alert gameOverPage = new Alert(AlertType.INFORMATION);
+						restart.setVisible(true);
+						gameOverPage.setHeaderText("Game Over");
+						gameOverPage.setContentText("Your score: " + score);
+						gameOverPage.showAndWait();
+					});
 					time.cancel();
 				}
 				else {
@@ -258,6 +295,10 @@ public class TetrisUI extends Application {
 		} , 0, fallSpeed);
 	}
 	
+	/**
+	 * Spawns a random shape and adds it to the next box area, adds droughtCounter by 1 for every piece other than "I" piece
+	 * @return returns a random shape object
+	 */
 	public static Shape spawnShape() {
 
 		Random rand = new Random();
@@ -460,6 +501,11 @@ public class TetrisUI extends Application {
 		changeSpeed();
 	}
 
+	/**
+	 * Checks if the current block is at the left edge of the screen, if it is, the block cannot move left
+	 * @param block the current block
+	 * @return returns true if the block is at the left edge, otherwise false
+	 */
 	public boolean isOutLeft(Shape block) {
 		if ((block.r1.getX() - SIZE) >= 0 && (block.r2.getX() - SIZE) >= 0 && (block.r3.getX() - SIZE) >= 0
 				&& (block.r4.getX() - SIZE) >= 0 && !tetrisBoard.checkLeft(block)) {
@@ -468,6 +514,11 @@ public class TetrisUI extends Application {
 		return true;
 	}
 
+	/**
+	 * Checks if the current block is at the right edge of the screen, if it is, the block cannot move right
+	 * @param block the current block
+	 * @return returns true if the block is at the right edge, otherwise false
+	 */
 	public boolean isOutRight(Shape block) {
 		if ((block.r1.getX() + SIZE) < WIDTH && (block.r2.getX() + SIZE) < WIDTH && (block.r3.getX() + SIZE) < WIDTH
 				&& (block.r4.getX() + SIZE) < WIDTH && !tetrisBoard.checkRight(block)) {
@@ -475,15 +526,12 @@ public class TetrisUI extends Application {
 		}
 		return true;
 	}
-
-	public boolean isOutTop(Shape block) {
-		if ((block.r1.getY() - SIZE) >= 0 && (block.r2.getY() - SIZE) >= 0 && (block.r3.getY() - SIZE) >= 0
-				&& (block.r4.getY() - SIZE) >= 0 && !tetrisBoard.checkDown(block)) {
-			return false;
-		}
-		return true;
-	}
-
+	
+	/**
+	 * Checks if the current block is at the bottom edge of the screen, if it is, the block cannot move down
+	 * @param block the current block
+	 * @return returns true if the block is at the bottom edge, otherwise false
+	 */
 	public static boolean isOutBottom(Shape block) {
 		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT && (block.r3.getY() + SIZE) < HEIGHT
 				&& (block.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(block)) {
@@ -492,6 +540,13 @@ public class TetrisUI extends Application {
 		return true;
 	}
 	
+	/**
+	 * Checks if the current block can rotate based on its position
+	 * If the rotation point (block.r2) is at any edge (except top edge), the block cannot rotate
+	 * In addition, if the rotation point is beside an another block, the block cannot rotate (shown in checkRotationPoint())
+	 * @param block the current block
+	 * @return returns true if the block can rotate, otherwise false
+	 */
 	public static boolean isRotate(Shape block) {
 		if (block.getShapeType().equals("I")) {
 			return ((block.r2.getX() - SIZE) >= 0 && (block.r2.getX() + SIZE) < WIDTH && (block.r2.getY() + SIZE) < HEIGHT
