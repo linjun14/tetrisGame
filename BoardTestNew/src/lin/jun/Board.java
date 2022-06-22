@@ -72,7 +72,7 @@ public class Board {
 		}
 	}
 
-	public boolean isTopOut(Shape block) {
+	public boolean isTopOut() {
 		for (int i : MESH[0]) {
 			if (i == 1) {
 				return true;

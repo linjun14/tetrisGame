@@ -76,8 +76,9 @@ public class TetrisUI extends Application {
 		VBox gameStats = new VBox(10);
 		Rectangle statsBoxSize = new Rectangle(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2);
 		gameStats.setShape(statsBoxSize);
-
-		VBox scoreAndLines = new VBox(5);
+		Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
+		nextBox.setStyle("-fx-fill: #F1F2F4; -fx-stroke: black; -fx-stroke-width: 1");
+		VBox gameInfo = new VBox(5);
 		Font labelFont = new Font("Arial", SIZE);
 
 		Label nextLabel = new Label("NEXT");
@@ -87,9 +88,6 @@ public class TetrisUI extends Application {
 		
 		highScoreLabel.setFont(labelFont);
 		nextLabel.setTranslateX(SIZE);
-		nextLabel.setTranslateY(SIZE);
-		droughtCount.setTranslateY(SIZE * 4);
-		controlContent.setTranslateY(SIZE * 4.5);
 		
 		scoreLabel.setFont(labelFont);
 		levelLabel.setFont(labelFont);
@@ -99,20 +97,19 @@ public class TetrisUI extends Application {
 		controlContent.setFont(contentFont);
 		
 		restart.setFont(labelFont);
-		restart.setTranslateY(SIZE * 5);
 		
-		scoreAndLines.getChildren().addAll(highScoreLabel, scoreLabel, levelLabel, lineLabel, nextLabel, droughtCount, controlContent, restart);
+		gameInfo.getChildren().addAll(highScoreLabel, scoreLabel, levelLabel, lineLabel, nextLabel, nextBox, droughtCount, controlContent, restart);
 
 		VBox pieceCounts = new VBox(5);
 
-		gameStats.getChildren().addAll(scoreAndLines, pieceCounts);
-		gameStats.setTranslateX(WIDTH + 15);
-		gameStats.setTranslateY(15);
+		gameStats.getChildren().addAll(gameInfo, pieceCounts);
+		gameStats.setTranslateX(WIDTH + SIZE / 2);
+		gameStats.setTranslateY(SIZE / 2);
 
 		for (int r = 0; r < NUM_ROWS; r++) {
 			for (int c = 0; c < NUM_COLS; c++) {
 				Rectangle square = new Rectangle(SIZE - 1, SIZE - 1);
-				square.setStyle("-fx-fill: #F1F2F5; -fx-stroke: white; -fx-stroke-width: 1;");
+				square.setStyle("-fx-fill: #F1F2F4; -fx-stroke: white; -fx-stroke-width: 1;");
 				gameBackground.add(square, c, r);
 			}
 		}
@@ -170,7 +167,7 @@ public class TetrisUI extends Application {
 		
 		game.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-				if (isOutBottom(john)) {
+				if (canMoveDown(john)) {
 					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
@@ -186,17 +183,17 @@ public class TetrisUI extends Application {
 				}
 			}
 			else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-				if (!isOutLeft(john)) {
+				if (!canMoveLeft(john)) {
 					control.moveLeft(john);
 				}
 			}
 			else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
-				if (!isOutRight(john)) {
+				if (!canMoveRight(john)) {
 					control.moveRight(john);
 				}
 			}
 			else if (e.getCode() == KeyCode.SPACE) {
-				while (!isOutBottom(john)) {
+				while (!canMoveDown(john)) {
 					control.moveDown(john);
 					score += 2;
 					scoreLabel.setText("Score: " + score);
@@ -212,6 +209,8 @@ public class TetrisUI extends Application {
 			else if (e.getCode() == KeyCode.Z) {
 				if (isRotate(john)) {
 					control.rotateLeft(john);
+					System.out.println(john.r4.getY());
+					System.out.println(john.r4.getY() < 0);
 				}
 			}
 			else if (e.getCode() == KeyCode.X) {
@@ -257,7 +256,7 @@ public class TetrisUI extends Application {
 		}
 		time.schedule(new TimerTask() {
 			public void run() {
-				if (tetrisBoard.isTopOut(john)) {
+				if (tetrisBoard.isTopOut()) {
 					Platform.runLater(() -> {
 						if (score > highScore) {
 							highScore = score;
@@ -272,11 +271,18 @@ public class TetrisUI extends Application {
 					time.cancel();
 				}
 				else {
-					if (isOutBottom(john)) {
-						tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-						tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-						tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-						tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+					if (canMoveDown(john)) {
+						if (john.r1.getY() < 0) {
+							tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
+							tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
+							tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+						}
+						else {
+							tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
+							tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
+							tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
+							tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+						}
 						control.resetRotation();
 						Platform.runLater(() -> deleteLines());
 						go = false;
@@ -506,7 +512,7 @@ public class TetrisUI extends Application {
 	 * @param block the current block
 	 * @return returns true if the block is at the left edge, otherwise false
 	 */
-	public boolean isOutLeft(Shape block) {
+	public boolean canMoveLeft(Shape block) {
 		if ((block.r1.getX() - SIZE) >= 0 && (block.r2.getX() - SIZE) >= 0 && (block.r3.getX() - SIZE) >= 0
 				&& (block.r4.getX() - SIZE) >= 0 && !tetrisBoard.checkLeft(block)) {
 			return false;
@@ -519,7 +525,7 @@ public class TetrisUI extends Application {
 	 * @param block the current block
 	 * @return returns true if the block is at the right edge, otherwise false
 	 */
-	public boolean isOutRight(Shape block) {
+	public boolean canMoveRight(Shape block) {
 		if ((block.r1.getX() + SIZE) < WIDTH && (block.r2.getX() + SIZE) < WIDTH && (block.r3.getX() + SIZE) < WIDTH
 				&& (block.r4.getX() + SIZE) < WIDTH && !tetrisBoard.checkRight(block)) {
 			return false;
@@ -532,7 +538,7 @@ public class TetrisUI extends Application {
 	 * @param block the current block
 	 * @return returns true if the block is at the bottom edge, otherwise false
 	 */
-	public static boolean isOutBottom(Shape block) {
+	public static boolean canMoveDown(Shape block) {
 		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT && (block.r3.getY() + SIZE) < HEIGHT
 				&& (block.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(block)) {
 			return false;
