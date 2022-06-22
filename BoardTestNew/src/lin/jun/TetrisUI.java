@@ -57,6 +57,7 @@ public class TetrisUI extends Application {
 	static Label highScoreLabel = new Label ("Highscore: " + highScore);
 	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
 	static Button restart = new Button("RESTART");
+	static Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
 	static int fallSpeed;
 	static Timer time;
 	static boolean go = false;
@@ -76,7 +77,6 @@ public class TetrisUI extends Application {
 		VBox gameStats = new VBox(10);
 		Rectangle statsBoxSize = new Rectangle(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2);
 		gameStats.setShape(statsBoxSize);
-		Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
 		nextBox.setStyle("-fx-fill: #F1F2F4; -fx-stroke: black; -fx-stroke-width: 1");
 		VBox gameInfo = new VBox(5);
 		Font labelFont = new Font("Arial", SIZE);
@@ -209,8 +209,6 @@ public class TetrisUI extends Application {
 			else if (e.getCode() == KeyCode.Z) {
 				if (isRotate(john)) {
 					control.rotateLeft(john);
-					System.out.println(john.r4.getY());
-					System.out.println(john.r4.getY() < 0);
 				}
 			}
 			else if (e.getCode() == KeyCode.X) {
