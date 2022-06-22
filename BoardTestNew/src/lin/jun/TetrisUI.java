@@ -412,10 +412,10 @@ public class TetrisUI extends Application {
 			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
 			block.setLocation(block.r4, 5 * SIZE, 1 * SIZE);
 		} else if (shapeType.equals("S")) {
-			block.setLocation(block.r4, 3 * SIZE, 1 * SIZE);
-			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
-			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
 			block.setLocation(block.r1, 5 * SIZE, 0 * SIZE);
+			block.setLocation(block.r2, 4 * SIZE, 0 * SIZE);
+			block.setLocation(block.r3, 4 * SIZE, 1 * SIZE);
+			block.setLocation(block.r4, 3 * SIZE, 1 * SIZE);
 		}
 		return nextShape;
 	}

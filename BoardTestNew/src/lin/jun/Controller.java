@@ -297,24 +297,24 @@ public class Controller {
 		}
 		else if (block.getShapeType().equals("S")) {
 			if (rotation == 1) {
-				moveUpRight(block.r1, 1, 1);
-				moveDownRight(block.r3, 1, 1);
-				moveDownRight(block.r4, 0, 2);
+				moveDownRight(block.r1, 1, 1);
+				moveDownLeft(block.r3, 1, 1);
+				moveDownLeft(block.r4, 2, 0);
 			}
 			else if (rotation == 2) {
-				moveDownLeft(block.r1, 1, 1);
-				moveUpLeft(block.r3, 1, 1);
-				moveUpLeft(block.r4, 0, 2);
+				moveUpLeft(block.r1, 1, 1);
+				moveUpRight(block.r3, 1, 1);
+				moveUpRight(block.r4, 2, 0);
 			}
 			else if (rotation == 3) {
-				moveUpRight(block.r1, 1, 1);
-				moveDownRight(block.r3, 1, 1);
-				moveDownRight(block.r4, 0, 2);
+				moveDownRight(block.r1, 1, 1);
+				moveDownLeft(block.r3, 1, 1);
+				moveDownLeft(block.r4, 2, 0);
 			}
 			else if (rotation == 4) {
-				moveDownLeft(block.r1, 1, 1);
-				moveUpLeft(block.r3, 1, 1);
-				moveUpLeft(block.r4, 0, 2);
+				moveUpLeft(block.r1, 1, 1);
+				moveUpRight(block.r3, 1, 1);
+				moveUpRight(block.r4, 2, 0);
 			}
 		}
 		else if (block.getShapeType().equals("I")) {
