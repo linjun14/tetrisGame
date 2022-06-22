@@ -39,73 +39,74 @@ public class TetrisUI extends Application {
 	final static int NUM_ROWS = 20;
 	final static int NUM_COLS = 10;
 	final static int SIZE = 35;
-	final static int WIDTH = SIZE * NUM_COLS;
-	final static int HEIGHT = SIZE * NUM_ROWS;
+	final static int WIDTH = SIZE * NUM_COLS; // Width of the graphical game board
+	final static int HEIGHT = SIZE * NUM_ROWS; // Height of the graphical game board
 	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
-	static Pane screen = new Pane();
+	static Pane screen = new Pane(); // The screen for the game
 	static String PLAYERNAME;
-	static int score = 0;
-	static int linesCleared = 0;
-	static int level = 0;
-	static int droughtCounter = 0;
-	static int highScore = 0;
-	static Shape nextShape = spawnShape();
-	static Shape john = spawnShapeOnBoard(nextShape);
+	private static int score = 0;
+	private static int linesCleared = 0;
+	private static int level = 0;
+	private static int droughtCounter = 0;
+	private static int highScore = 0;
+	static Shape nextShape = spawnShape(); // Spawns the first shape
+	static Shape john = spawnShapeOnBoard(nextShape); // Spawns the first shape on the game board
 	static Label levelLabel = new Label("Level: " + level);
 	static Label scoreLabel = new Label("Score: " + score);
 	static Label lineLabel = new Label("Lines: " + linesCleared);
 	static Label highScoreLabel = new Label ("Highscore: " + highScore);
 	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
-	static Button restart = new Button("RESTART");
+	static Button restart = new Button("RESTART"); // Button for restarting the game
 	static Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
-	static int fallSpeed;
+	static int fallSpeed; // Auto drop speed of the blocks
 	static Timer time;
 	static boolean go = false;
 	static Controller control = new Controller();
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		// TODO Auto-generated method stub
 		StackPane gameScreen = new StackPane();
-		Line separation = new Line(WIDTH, 0, WIDTH, HEIGHT);
-		Line separation2 = new Line(0, 0, WIDTH, HEIGHT);
-		GridPane gameBackground = new GridPane();
 		
+		// Game background
+		GridPane gameBackground = new GridPane();
 		Rectangle gameRect = new Rectangle(0, 0, WIDTH, HEIGHT);
 		gameBackground.setShape(gameRect);
 
+		// Game statistics 
 		VBox gameStats = new VBox(10);
 		Rectangle statsBoxSize = new Rectangle(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2);
 		gameStats.setShape(statsBoxSize);
-		nextBox.setStyle("-fx-fill: #F1F2F4; -fx-stroke: black; -fx-stroke-width: 1");
 		VBox gameInfo = new VBox(5);
-		Font labelFont = new Font("Arial", SIZE);
-
+		Line separation = new Line(WIDTH, 0, WIDTH, HEIGHT);
 		Label nextLabel = new Label("NEXT");
 		Label controlContent = new Label("************CONTROLS************ \n LEFT ARROW - MOVE LEFT \n RIGHT ARROW - MOVE RIGHT \n DOWN ARROW - MOVE DOWN "
 										+ "\n SPACE - HARD DROP \n Z - ROTATE LEFT \n X - ROTATE RIGHT");
+		
+		// Font styles for the labels
+		Font labelFont = new Font("Arial", SIZE);
 		Font contentFont = new Font ("Arial", SIZE/2);
 		
+		// Sets the labels with their corresponding fonts
 		highScoreLabel.setFont(labelFont);
-		nextLabel.setTranslateX(SIZE);
-		
 		scoreLabel.setFont(labelFont);
 		levelLabel.setFont(labelFont);
 		lineLabel.setFont(labelFont);
-		nextLabel.setFont(labelFont);
 		droughtCount.setFont(labelFont);
+		restart.setFont(labelFont);
 		controlContent.setFont(contentFont);
 		
-		restart.setFont(labelFont);
+		// Sets the properties of the next box
+		nextBox.setStyle("-fx-fill: #F1F2F4; -fx-stroke: black; -fx-stroke-width: 1");
+		nextLabel.setTranslateX(SIZE);
+		nextLabel.setFont(labelFont);
 		
+		// Adds all necessary information display to gameInfo, then to gameStats
 		gameInfo.getChildren().addAll(highScoreLabel, scoreLabel, levelLabel, lineLabel, nextLabel, nextBox, droughtCount, controlContent, restart);
-
-		VBox pieceCounts = new VBox(5);
-
-		gameStats.getChildren().addAll(gameInfo, pieceCounts);
+		gameStats.getChildren().add(gameInfo);
 		gameStats.setTranslateX(WIDTH + SIZE / 2);
 		gameStats.setTranslateY(SIZE / 2);
 
+		// Creates the game board background
 		for (int r = 0; r < NUM_ROWS; r++) {
 			for (int c = 0; c < NUM_COLS; c++) {
 				Rectangle square = new Rectangle(SIZE - 1, SIZE - 1);
@@ -113,47 +114,63 @@ public class TetrisUI extends Application {
 				gameBackground.add(square, c, r);
 			}
 		}
+		
 		gameBackground.setAlignment(Pos.CENTER);
-		screen.getChildren().addAll(separation2, gameBackground, separation, gameStats);
+		
+		// Adds the background, separation line, and game statistics to the screen
+		screen.getChildren().addAll(gameBackground, separation, gameStats);
 		gameScreen.getChildren().addAll(screen);
+		
+		// The scene for the game
 		Scene game = new Scene(gameScreen, WIDTH * 2, HEIGHT);
 
+		// Spawns the second shape (first shape in the next box)
 		nextShape = spawnShape();
 		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 		
+		// Design for the input screen (for entering player name and starting level)
 		VBox inputScreen = new VBox(10);
 		inputScreen.setStyle("-fx-background-color: #97AAE0");
 		inputScreen.setAlignment(Pos.CENTER);
 		Label info = new Label("Enter name 				 Enter Level (0-19)");
 		Label errorMessage = new Label("Please enter a valid level 0-19");
 		HBox playerInputBox = new HBox(20);
+		
+		// Text fields for user input
 		TextField playerName = new TextField("PlayerName");
 		TextField levelWanted = new TextField("0");
 		playerInputBox.getChildren().addAll(playerName, levelWanted);
 		playerInputBox.setAlignment(Pos.CENTER);
+		
+		// Button to start game
 		Button confirmation = new Button("Confirm");
 		confirmation.setMinSize(200, 50);
 		inputScreen.getChildren().addAll(info, playerInputBox, confirmation);
 		
+		// The scene for entering player name and starting level
 		Scene playerInputScene = new Scene(inputScreen, 350, 200);
 		errorMessage.setVisible(false);
 		inputScreen.getChildren().add(errorMessage);
 		errorMessage.setAlignment(Pos.CENTER);
+		
+		// Confirms the user inputs and starts the game based on the input
 		confirmation.setOnAction(e -> {
+			// If the level is valid (0 - 19), start the game, otherwise display an error message
 			if 	(Integer.valueOf(levelWanted.getText()) < 20 && Integer.valueOf(levelWanted.getText()) > -1) {
 				PLAYERNAME = playerName.getText();
 				level = Integer.valueOf(levelWanted.getText());
 				levelLabel.setText(String.valueOf("Level: " + level));
-				restart.setVisible(false);
+				restart.setVisible(false); // Sets the visibility of the restart button to false
 				stage.setScene(game);
-				changeSpeed();
+				changeSpeed(); // Starts the timer task
 			}
 			else {
 				errorMessage.setVisible(true);
 			}
 		});
 
+		// Restarts the game
 		restart.setOnAction(e -> {
 			stage.setScene(playerInputScene);
 			tetrisBoard.clearBoard();
@@ -165,8 +182,12 @@ public class TetrisUI extends Application {
 			droughtCount.setText("Longbar drought:"+ droughtCounter);
 		});
 		
+		// This allows the user to move/rotate the current block
 		game.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
+			// If down arrow is pressed, try to move the current block down
+			if (e.getCode() == KeyCode.DOWN) {
+				/* If the current block reaches the last available row, drop the piece, cancel the timer, and call the timer again
+				   Otherwise move the current block down by 1 square and add score by 1 */
 				if (canMoveDown(john)) {
 					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
@@ -182,17 +203,23 @@ public class TetrisUI extends Application {
 					scoreLabel.setText("Score: " + score);
 				}
 			}
-			else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
+			// If left arrow is pressed, try to move the current block left
+			else if (e.getCode() == KeyCode.LEFT) {
+				// If the current block can move left, move it left by 1 square
 				if (!canMoveLeft(john)) {
 					control.moveLeft(john);
 				}
 			}
-			else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
+			// If the right arrow is pressed, try to move the current block right
+			else if (e.getCode() == KeyCode.RIGHT) {
+				// If the current block can move right, move it right by 1 square
 				if (!canMoveRight(john)) {
 					control.moveRight(john);
 				}
 			}
+			// If the space bar is pressed, move the current block all the way to the last available row
 			else if (e.getCode() == KeyCode.SPACE) {
+				// If the current block can move down, keep moving it down by 1
 				while (!canMoveDown(john)) {
 					control.moveDown(john);
 					score += 2;
@@ -203,21 +230,27 @@ public class TetrisUI extends Application {
 				tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 				control.resetRotation();
+				// Cancel the timer and call it again once the block reaches the bottom
 				time.cancel();
 				changeSpeed();
 			}
+			// If the "Z" key is pressed, try to rotate the current block left
 			else if (e.getCode() == KeyCode.Z) {
+				// If the block can rotate left, rotate it left
 				if (isRotate(john)) {
 					control.rotateLeft(john);
 				}
 			}
+			// If the "S" key is pressed, try to rotate the current block right
 			else if (e.getCode() == KeyCode.X) {
+				// If the block can rotate right, rotate it left
 				if (isRotate(john)) {
 					control.rotateRight(john);
 				}
 			}
 		});
 		
+		// Sets the initial scene to the player input scene
 		stage.setScene(playerInputScene);
 		stage.setTitle("TETRIS");
 		stage.show();

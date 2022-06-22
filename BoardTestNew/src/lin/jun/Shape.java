@@ -41,10 +41,20 @@ public class Shape {
 		this.r4.setFill(shapeColor);
 	}
 	
+	/**
+	 * Returns the shape type of a block
+	 * @return returns the shape type of a block
+	 */
 	public String getShapeType() {
 		return shapeType;
 	}
 	
+	/**
+	 * Sets the x and y positions of a rectangle on the screen
+	 * @param r the selected rectangle on the current shape
+	 * @param x the x coordinate to be set for the rectangle
+	 * @param y the y coordinate to be set for the rectangle
+	 */
 	public void setLocation(Rectangle r, int x, int y) {
 		r.setX(x);
 		r.setY(y);
