@@ -41,7 +41,7 @@ public class TetrisUI extends Application {
 	final static int SIZE = 35;
 	final static int WIDTH = SIZE * NUM_COLS; // Width of the graphical game board
 	final static int HEIGHT = SIZE * NUM_ROWS; // Height of the graphical game board
-	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS);
+	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS); // The Board object for the tetris board
 	static Pane screen = new Pane(); // The screen for the game
 	static String PLAYERNAME;
 	private static int score = 0;
@@ -60,8 +60,8 @@ public class TetrisUI extends Application {
 	static Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
 	static int fallSpeed; // Auto drop speed of the blocks
 	static Timer time;
-	static boolean go = false;
-	static Controller control = new Controller();
+	static boolean go = false; // Prevents piece from moving down when the timer is called
+	static Controller control = new Controller(); // The controller object for the game
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -123,11 +123,6 @@ public class TetrisUI extends Application {
 		
 		// The scene for the game
 		Scene game = new Scene(gameScreen, WIDTH * 2, HEIGHT);
-
-		// Spawns the second shape (first shape in the next box)
-		nextShape = spawnShape();
-		screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
-		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 		
 		// Design for the input screen (for entering player name and starting level)
 		VBox inputScreen = new VBox(10);
@@ -163,6 +158,10 @@ public class TetrisUI extends Application {
 				levelLabel.setText(String.valueOf("Level: " + level));
 				restart.setVisible(false); // Sets the visibility of the restart button to false
 				stage.setScene(game);
+				// Spawns the initial shapes on the board
+				nextShape = spawnShape();
+				screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+				screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 				changeSpeed(); // Starts the timer task
 			}
 			else {
@@ -180,6 +179,7 @@ public class TetrisUI extends Application {
 			scoreLabel.setText("Score: " + score);
 			lineLabel.setText("Lines: " + linesCleared);
 			droughtCount.setText("Longbar drought:"+ droughtCounter);
+			clearGraphicalBoard();
 		});
 		
 		// This allows the user to move/rotate the current block
@@ -188,7 +188,7 @@ public class TetrisUI extends Application {
 			if (e.getCode() == KeyCode.DOWN) {
 				/* If the current block reaches the last available row, drop the piece, cancel the timer, and call the timer again
 				   Otherwise move the current block down by 1 square and add score by 1 */
-				if (canMoveDown(john)) {
+				if (cannotMoveDown(john)) {
 					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
@@ -220,7 +220,7 @@ public class TetrisUI extends Application {
 			// If the space bar is pressed, move the current block all the way to the last available row
 			else if (e.getCode() == KeyCode.SPACE) {
 				// If the current block can move down, keep moving it down by 1
-				while (!canMoveDown(john)) {
+				while (!cannotMoveDown(john)) {
 					control.moveDown(john);
 					score += 2;
 					scoreLabel.setText("Score: " + score);
@@ -265,8 +265,9 @@ public class TetrisUI extends Application {
 	 * Changes the auto drop speed based on the level
 	 */
 	public static void changeSpeed() {
-		time = new Timer();
+		time = new Timer(); // Creates a new timer
 		
+		// Assigns a drop speed based on the current level
 		if (level <= 8) {
 			fallSpeed = 1000 - 100 * level;
 		}
@@ -285,40 +286,48 @@ public class TetrisUI extends Application {
 		else {
 			fallSpeed = 42;
 		}
+		// Creates a new schedule every time its scheduled
 		time.schedule(new TimerTask() {
 			public void run() {
+				// If the player tops out (first row is filled), end the game
 				if (tetrisBoard.isTopOut()) {
 					Platform.runLater(() -> {
+						// Sets the highscore
 						if (score > highScore) {
 							highScore = score;
 							highScoreLabel.setText("Highscore: " + highScore);
 						}
+						// Creates an alert object displaying the final score of the game
 						Alert gameOverPage = new Alert(AlertType.INFORMATION);
 						restart.setVisible(true);
 						gameOverPage.setHeaderText("Game Over");
-						gameOverPage.setContentText("Your score: " + score);
+						gameOverPage.setContentText(PLAYERNAME + ". Your score:" + score);
 						gameOverPage.showAndWait();
 					});
-					time.cancel();
+					time.cancel(); // Cancels the timer
 				}
 				else {
-					if (canMoveDown(john)) {
+					// Otherwise, if the block cannot move down, place the block when it reaches the bottom
+					if (cannotMoveDown(john)) {
+						// (For special cases) if a rectangle reaches the top and is to be placed, do not place the topmost block on the board
 						if (john.r1.getY() < 0) {
 							tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 							tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 							tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 						}
+						// Otherwise place the whole block on the board
 						else {
 							tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
 							tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
 							tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
 							tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
 						}
-						control.resetRotation();
-						Platform.runLater(() -> deleteLines());
-						go = false;
-						// tetrisBoard.displayBoard();
-					} 
+						control.resetRotation(); // Resets the rotation number
+						Platform.runLater(() -> deleteLines()); // Deletes a line, if possible
+						go = false; // Sets "go" to false
+						// tetrisBoard.displayBoard(); (This was used to check if the graphical board matches with the text board)
+					}
+					// If the block can move down, move the block down by 1 square
 					else {
 						if (go) {
 							control.moveDown(john);
@@ -338,16 +347,22 @@ public class TetrisUI extends Application {
 	 */
 	public static Shape spawnShape() {
 
+		// Selects a random number from 1 to 7
 		Random rand = new Random();
 		int shapeType = rand.nextInt(7);
 
+		// The four rectangles for each block
 		Rectangle a = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle b = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle c = new Rectangle(SIZE - 1, SIZE - 1);
 		Rectangle d = new Rectangle(SIZE - 1, SIZE - 1);
 
-		Shape block = null;
+		Shape block = null; // Initialized the block with "null"
 
+		/*
+		 *  Assigns the shape type based on "shapeType" value
+		 *  Adds drought counter by one if the block is not "I", otherwise reset the counter
+		 */
 		switch (shapeType + 1) {
 		case 1:
 			block = new Shape(a, b, c, d, "T");
@@ -453,8 +468,9 @@ public class TetrisUI extends Application {
 		return nextShape;
 	}
 
+	// TODO
 	public static void deleteLines() {
-		time.cancel();
+		time.cancel(); // Cancels the timer
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>();
 		ArrayList<Node> blocks = new ArrayList<Node>();
 		int lineBlocks = 0;
@@ -473,6 +489,10 @@ public class TetrisUI extends Application {
 			lineBlocks = 0;
 
 		}
+		/*
+		 *  Sets the scoring based on the current level
+		 *  Scoring system retrieved from https://tetris.fandom.com/wiki/Scoring
+		 */
 		if (linesFilled.size() == 1) {
 			score += 40 * (level + 1);
 		} else if (linesFilled.size() == 2) {
@@ -482,15 +502,22 @@ public class TetrisUI extends Application {
 		} else if (linesFilled.size() == 4) {
 			score += 1200 * (level + 1);
 		}
-		linesCleared += linesFilled.size();
+		linesCleared += linesFilled.size(); // Adds lines cleared by the amount of objects in linesFilled
 		
+		/*
+		 *  If the number of lines cleared divided by 10 is greater than the current level number
+		 *  Set the level to the quotient of the lines cleared by 10
+		 */
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
 		}
+		
+		// Changes the level, line, and score label
 		levelLabel.setText("Level: " + (level));
-
 		lineLabel.setText("Lines: " + linesCleared);
 		scoreLabel.setText("Score: " + score);
+		
+		// TODO
 		if (linesFilled.size() > 0) {
 			do {
 				for (Node block : screen.getChildren()) { // Gets all of the rectangles that are in the
@@ -529,15 +556,31 @@ public class TetrisUI extends Application {
 			} while (linesFilled.size() > 0);
 		}
 		
-		control.resetRotation();
+		control.resetRotation(); // Resets the rotation number
+		
+		// Spawns the shape in the next box onto the board and spawns a new shape in the next box
 		john = spawnShapeOnBoard(nextShape);
 		droughtCount.setText("Longbar drought:" + droughtCounter);
 		nextShape = spawnShape();
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 		
-		changeSpeed();
+		changeSpeed(); // Restarts the timer
 	}
 
+	public static void clearGraphicalBoard() {
+		ArrayList<Rectangle> blocks = new ArrayList<Rectangle>();
+		
+		for (Node block : screen.getChildren()) {
+			if (block instanceof Rectangle) {
+				blocks.add((Rectangle) block);
+			}
+		}
+		
+		for (Node block : blocks) {
+			screen.getChildren().remove(block);
+		}
+	}
+	
 	/**
 	 * Checks if the current block is at the left edge of the screen, if it is, the block cannot move left
 	 * @param block the current block
@@ -569,7 +612,7 @@ public class TetrisUI extends Application {
 	 * @param block the current block
 	 * @return returns true if the block is at the bottom edge, otherwise false
 	 */
-	public static boolean canMoveDown(Shape block) {
+	public static boolean cannotMoveDown(Shape block) {
 		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT && (block.r3.getY() + SIZE) < HEIGHT
 				&& (block.r4.getY() + SIZE) < HEIGHT && !tetrisBoard.checkDown(block)) {
 			return false;
