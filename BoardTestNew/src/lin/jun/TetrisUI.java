@@ -501,7 +501,11 @@ public class TetrisUI extends Application {
 		return nextShape;
 	}
 
-	// TODO
+	/*
+	 * The algorithm that check through each row to see if it is filled up by blocks
+	 * If a line is completely filled, it will be deleted from the screen and the cellstate will be set back to 0
+	 * This Method also moves each line down every time a line is cleared
+	 */
 	public static void deleteLines() {
 		time.cancel(); // Cancels the timer
 		ArrayList<Integer> linesFilled = new ArrayList<Integer>();
