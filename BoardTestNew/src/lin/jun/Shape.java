@@ -8,7 +8,6 @@ import javafx.scene.shape.Rectangle;
  * @author Jun Lin
  * @author Kenneth Ou
  */
-
 public class Shape {
 	public Rectangle r1, r2, r3, r4;
 	private Color shapeColor;

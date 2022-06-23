@@ -35,19 +35,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * A simulation of the classic Tetris game
  * @author Jun Lin
@@ -80,13 +67,11 @@ public class TetrisUI extends Application {
 	private Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
 	private static int fallSpeed; // Auto drop speed of the blocks
 	private static Timer time;
-	private VBox pauseDisplay = new VBox(5);
-	private boolean pause = false;
+	private boolean pause = false; // Pause game status
 	private static boolean go = false; // Prevents piece from moving down when the timer is called
 	private static Controller control = new Controller(); // The controller object for the game
 
 	@Override
-	
 	public void start(Stage stage) throws Exception {
 		
 		// Game background
@@ -218,9 +203,9 @@ public class TetrisUI extends Application {
 					tetrisBoard.fillCell((int) block.r3.getY() / SIZE, (int) block.r3.getX() / SIZE);
 					tetrisBoard.fillCell((int) block.r4.getY() / SIZE, (int) block.r4.getX() / SIZE);
 					control.resetRotation();
+					// Cancels the timer and calls again once the block reaches the bottom
 					time.cancel();
 					changeSpeed();
-					// tetrisBoard.displayBoard();
 				} else {
 					control.moveDown(block);
 					score += 1;
@@ -274,14 +259,14 @@ public class TetrisUI extends Application {
 			}
 			else if (e.getCode() == KeyCode.P) {
 				if (pause == false) {
-					time.cancel();
+					time.cancel(); // Cancel the timer
 					pause = true;
-					pauseGame(pause);
+					pauseGame(pause); // Displays the pause screen
 				}
 				else {
-					changeSpeed();
+					changeSpeed(); // Calls the timer
 					pause = false;
-					pauseGame(pause);
+					pauseGame(pause); // Displays the pause Sscreen
 				}
 			}
 		});
@@ -297,31 +282,34 @@ public class TetrisUI extends Application {
 	 * @param pause if the game is paused or not
 	 */
 	private void pauseGame(boolean pause) {
+		// If the game is pause, display the pause screen
 		if (pause) {
-		Rectangle endPanel = new Rectangle();
-		endPanel.setHeight(125);
-		endPanel.setWidth(350);
-		endPanel.setArcHeight(35);
-		endPanel.setArcWidth(35);
+			// Shape of the pause screen
+			Rectangle endPanel = new Rectangle();
+			endPanel.setHeight(125);
+			endPanel.setWidth(350);
+			endPanel.setArcHeight(35);
+			endPanel.setArcWidth(35);
 
-		Label pauseText = new Label("Paused");
-		Label pauseText2 = new Label("Press P to continue");
-		Font font = new Font("Helvetica", 50);
-		Font continueFont = new Font("Helvetica", 25);
-		pauseText.setTextFill(Color.GREEN);
-		pauseText.setFont(font);
-		pauseText2.setFont(continueFont);
-		VBox pauseScreen = new VBox(20);
-		pauseScreen.setMaxSize(350, 200);
+			// Contents in the pause screen
+			Label pauseText = new Label("Paused");
+			Label pauseText2 = new Label("Press P to continue");
+			Font font = new Font("Helvetica", 50);
+			Font continueFont = new Font("Helvetica", 25);
+			pauseText.setTextFill(Color.GREEN);
+			pauseText.setFont(font);
+			pauseText2.setFont(continueFont);
+			VBox pauseScreen = new VBox(20);
+			pauseScreen.setMaxSize(350, 200);
 
-		pauseScreen.setShape(endPanel);
-		pauseScreen.setStyle("-fx-background-color: #ECD384");
-		pauseScreen.setAlignment(Pos.CENTER);
-		pauseScreen.getChildren().addAll(pauseText, pauseText2);
-
-		pauseScreen.setAlignment(Pos.CENTER);
-		gameScreen.getChildren().add(pauseScreen);
+			// Sets the properties of the pause screen
+			pauseScreen.setShape(endPanel);
+			pauseScreen.setStyle("-fx-background-color: #ECD384");
+			pauseScreen.getChildren().addAll(pauseText, pauseText2);
+			pauseScreen.setAlignment(Pos.CENTER);
+			gameScreen.getChildren().add(pauseScreen);
 		}
+		// If the game is not paused, remove the pause screen from the game screen
 		if (!pause) {
 			gameScreen.getChildren().remove(1);
 		}
@@ -648,15 +636,19 @@ public class TetrisUI extends Application {
 		changeSpeed(); // Restarts the timer
 	}
 
+	/**
+	 * Clears the graphical game board
+	 */
 	public static void clearGraphicalBoard() {
 		ArrayList<Rectangle> blocks = new ArrayList<Rectangle>();
 		
+		// Checks every node in the screen, if a node is a rectangle, add that node to "blocks"
 		for (Node block : screen.getChildren()) {
 			if (block instanceof Rectangle) {
 				blocks.add((Rectangle) block);
 			}
 		}
-		
+		// Removes each block in blocks
 		for (Node block : blocks) {
 			screen.getChildren().remove(block);
 		}
@@ -664,6 +656,7 @@ public class TetrisUI extends Application {
 	
 	/**
 	 * Checks if the current block is at the left edge of the screen, if it is, the block cannot move left
+	 * The block cannot move left also when it is beside another block
 	 * @param block the current block
 	 * @return returns true if the block is at the left edge, otherwise false
 	 */
@@ -677,6 +670,7 @@ public class TetrisUI extends Application {
 
 	/**
 	 * Checks if the current block is at the right edge of the screen, if it is, the block cannot move right
+	 * The block cannot move right also when it is beside another block
 	 * @param block the current block
 	 * @return returns true if the block is at the right edge, otherwise false
 	 */
@@ -690,8 +684,9 @@ public class TetrisUI extends Application {
 	
 	/**
 	 * Checks if the current block is at the bottom edge of the screen, if it is, the block cannot move down
+	 * The block cannot move down also when it is beside another block
 	 * @param block the current block
-	 * @return returns true if the block is at the bottom edge, otherwise false
+	 * @return returns true if the block is at the bottom edge (meaning it cannot mode down), otherwise false
 	 */
 	public static boolean cannotMoveDown(Shape block) {
 		if ((block.r1.getY() + SIZE) < HEIGHT && (block.r2.getY() + SIZE) < HEIGHT && (block.r3.getY() + SIZE) < HEIGHT
@@ -733,7 +728,7 @@ public class TetrisUI extends Application {
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioInputStream);
 				clip.loop(clip.LOOP_CONTINUOUSLY);
-				System.out.println("Jonh");
+				System.out.println("PLAYING BGM");
 			}
 			else {
 				System.out.println("File not found");
@@ -742,5 +737,3 @@ public class TetrisUI extends Application {
 		}
 	}
  }
-
-
