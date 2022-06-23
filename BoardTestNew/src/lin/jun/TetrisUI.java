@@ -543,11 +543,17 @@ public class TetrisUI extends Application {
 		
 		/*
 		 *  If the number of lines cleared divided by 10 is greater than the current level number
-		 *  Set the level to the quotient of the lines cleared by 10
+		 *  Set the level to the quotient of the lines cleared by a factor of 10
 		 */
 		if (linesCleared / 10 > level) {
 			level = (linesCleared / 10);
 		}
+		
+		
+		
+		adawsjkydsajhdkjahskjsahdsahkdsahkdshkdsakhasjksh
+		
+		
 		
 		// Changes the level, line, and score label
 		levelLabel.setText("Level: " + (level));
