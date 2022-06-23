@@ -15,12 +15,12 @@ public class Shape {
 	private String shapeType;
 	
 	/**
-	 * TODO
-	 * @param a
-	 * @param b
-	 * @param c
-	 * @param d
-	 * @param shapeName
+	 * Constructor for a new shape, depending on what shape it is, the colour of the shape is assigned differently.
+	 * @param a Rectangle Parts of the shape
+	 * @param b Rectangle Parts of the shape
+	 * @param c Rectangle Parts of the shape
+	 * @param d Rectangle Parts of the shape
+	 * @param shapeName Determine what type of shape it is
 	 */
 	public Shape(Rectangle a, Rectangle b, Rectangle c, Rectangle d, String shapeName) {
 		r1 = a;

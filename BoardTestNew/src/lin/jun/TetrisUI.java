@@ -549,12 +549,6 @@ public class TetrisUI extends Application {
 			level = (linesCleared / 10);
 		}
 		
-		
-		
-		adawsjkydsajhdkjahskjsahdsahkdsahkdshkdsakhasjksh
-		
-		
-		
 		// Changes the level, line, and score label
 		levelLabel.setText("Level: " + (level));
 		lineLabel.setText("Lines: " + linesCleared);
