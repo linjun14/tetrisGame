@@ -9,10 +9,10 @@ import javafx.scene.shape.Rectangle;
  *
  */
 public class Controller {
-	final static int SIZE = TetrisUI.SIZE;
-	final static int WIDTH = TetrisUI.WIDTH;
-	final int HEIGHT = TetrisUI.HEIGHT;
-	int rotation = 1;
+	private final static int SIZE = TetrisUI.SIZE;
+	private int rotation = 1;
+	public final static int WIDTH = TetrisUI.WIDTH;
+	public final int HEIGHT = TetrisUI.HEIGHT;
 	
 	/**
 	 * Moves a block right by 1 square
@@ -53,6 +53,7 @@ public class Controller {
 	 */
 	public void rotateRight(Shape block) {
 		
+		// Adds rotation every time this is called, if rotation is 4, reset the rotation to 4
 		if (rotation != 4) {
 			rotation++;
 		}
@@ -60,6 +61,7 @@ public class Controller {
 			rotation = 1;
 		}
 		
+		// Moves every square in the current block based on the shape type and the rotation number
 		if (block.getShapeType().equals("T")) {
 			if (rotation == 1) {
 				moveUpLeft(block.r1, 1, 1);
@@ -200,6 +202,7 @@ public class Controller {
 	 */
 	public void rotateLeft(Shape block) {
 		
+		// Subtracts rotation by 1 every time it is called, otherwise reset the rotation to 4
 		if (rotation != 1) {
 			rotation--;
 		}
@@ -207,6 +210,7 @@ public class Controller {
 			rotation = 4;
 		}
 		
+		// Moves every square in the current block based on its shape type and the rotation number
 		if (block.getShapeType().equals("T")) {
 			if (rotation == 1) {
 				moveDownLeft(block.r1, 1, 1);

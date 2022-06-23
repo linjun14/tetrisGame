@@ -1,10 +1,16 @@
 package lin.jun;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -36,36 +42,39 @@ import javafx.stage.Stage;
  */
 public class TetrisUI extends Application {
 
-	final static int NUM_ROWS = 20;
-	final static int NUM_COLS = 10;
-	final static int SIZE = 35;
-	final static int WIDTH = SIZE * NUM_COLS; // Width of the graphical game board
-	final static int HEIGHT = SIZE * NUM_ROWS; // Height of the graphical game board
-	static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS); // The Board object for the tetris board
-	static Pane screen = new Pane(); // The screen for the game
-	static String PLAYERNAME;
+	private final static int NUM_ROWS = 20;
+	private final static int NUM_COLS = 10;
+	public final static int SIZE = 35;
+	public final static int WIDTH = SIZE * NUM_COLS; // Width of the graphical game board
+	public final static int HEIGHT = SIZE * NUM_ROWS; // Height of the graphical game board
+	private static Board tetrisBoard = new Board(NUM_ROWS, NUM_COLS); // The Board object for the tetris board
+	private static StackPane gameScreen = new StackPane();
+	private static Pane screen = new Pane(); // The screen for the game
+	private static String PLAYERNAME;
 	private static int score = 0;
 	private static int linesCleared = 0;
 	private static int level = 0;
 	private static int droughtCounter = 0;
 	private static int highScore = 0;
-	static Shape nextShape = spawnShape(); // Spawns the first shape
-	static Shape john = spawnShapeOnBoard(nextShape); // Spawns the first shape on the game board
-	static Label levelLabel = new Label("Level: " + level);
-	static Label scoreLabel = new Label("Score: " + score);
-	static Label lineLabel = new Label("Lines: " + linesCleared);
-	static Label highScoreLabel = new Label ("Highscore: " + highScore);
-	static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
-	static Button restart = new Button("RESTART"); // Button for restarting the game
-	static Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
-	static int fallSpeed; // Auto drop speed of the blocks
-	static Timer time;
-	static boolean go = false; // Prevents piece from moving down when the timer is called
-	static Controller control = new Controller(); // The controller object for the game
+	private static Shape nextShape = spawnShape(); // Spawns the first shape
+	public static Shape block = spawnShapeOnBoard(nextShape); // Spawns the first shape on the game board
+	private static Label levelLabel = new Label("Level: " + level);
+	private static Label scoreLabel = new Label("Score: " + score);
+	private static Label lineLabel = new Label("Lines: " + linesCleared);
+	private static Label highScoreLabel = new Label ("Highscore: " + highScore);
+	private static Label droughtCount = new Label("Longbar drought: " + droughtCounter);
+	private static Button restart = new Button("RESTART"); // Button for restarting the game
+	private Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
+	private static int fallSpeed; // Auto drop speed of the blocks
+	private static Timer time;
+	private VBox pauseDisplay = new VBox(5);
+	private boolean pause = false;
+	private static boolean go = false; // Prevents piece from moving down when the timer is called
+	private static Controller control = new Controller(); // The controller object for the game
 
 	@Override
+	
 	public void start(Stage stage) throws Exception {
-		StackPane gameScreen = new StackPane();
 		
 		// Game background
 		GridPane gameBackground = new GridPane();
@@ -80,7 +89,7 @@ public class TetrisUI extends Application {
 		Line separation = new Line(WIDTH, 0, WIDTH, HEIGHT);
 		Label nextLabel = new Label("NEXT");
 		Label controlContent = new Label("************CONTROLS************ \n LEFT ARROW - MOVE LEFT \n RIGHT ARROW - MOVE RIGHT \n DOWN ARROW - MOVE DOWN "
-										+ "\n SPACE - HARD DROP \n Z - ROTATE LEFT \n X - ROTATE RIGHT");
+										+ "\n SPACE - HARD DROP \n Z - ROTATE LEFT \n X - ROTATE RIGHT \n P - PAUSE");
 		
 		// Font styles for the labels
 		Font labelFont = new Font("Arial", SIZE);
@@ -94,6 +103,16 @@ public class TetrisUI extends Application {
 		droughtCount.setFont(labelFont);
 		restart.setFont(labelFont);
 		controlContent.setFont(contentFont);
+		
+		pauseDisplay.setAlignment(Pos.CENTER);
+		Rectangle pauseRect = new Rectangle(SIZE * 7, SIZE * 4);
+		pauseDisplay.setShape(pauseRect);
+		pauseDisplay.setStyle("-fx-background-color: #FFFFFF");
+		Label pauseLabel1 = new Label("GAME PAUSED");
+		Label pauseLabel2 = new Label("Press P to continue");
+		pauseLabel1.setFont(labelFont);
+		pauseLabel2.setFont(contentFont);
+		pauseDisplay.getChildren().addAll(pauseLabel1, pauseLabel2);
 		
 		// Sets the properties of the next box
 		nextBox.setStyle("-fx-fill: #F1F2F4; -fx-stroke: black; -fx-stroke-width: 1");
@@ -149,6 +168,8 @@ public class TetrisUI extends Application {
 		inputScreen.getChildren().add(errorMessage);
 		errorMessage.setAlignment(Pos.CENTER);
 		
+		playBGM(); // Plays the background music
+		
 		// Confirms the user inputs and starts the game based on the input
 		confirmation.setOnAction(e -> {
 			// If the level is valid (0 - 19), start the game, otherwise display an error message
@@ -160,7 +181,7 @@ public class TetrisUI extends Application {
 				stage.setScene(game);
 				// Spawns the initial shapes on the board
 				nextShape = spawnShape();
-				screen.getChildren().addAll(john.r1, john.r2, john.r3, john.r4);
+				screen.getChildren().addAll(block.r1, block.r2, block.r3, block.r4);
 				screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 				changeSpeed(); // Starts the timer task
 			}
@@ -185,67 +206,79 @@ public class TetrisUI extends Application {
 		// This allows the user to move/rotate the current block
 		game.setOnKeyPressed(e -> {
 			// If down arrow is pressed, try to move the current block down
-			if (e.getCode() == KeyCode.DOWN) {
+			if (e.getCode() == KeyCode.DOWN && pause == false) {
 				/* If the current block reaches the last available row, drop the piece, cancel the timer, and call the timer again
 				   Otherwise move the current block down by 1 square and add score by 1 */
-				if (cannotMoveDown(john)) {
-					tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-					tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+				if (cannotMoveDown(block)) {
+					tetrisBoard.fillCell((int) block.r1.getY() / SIZE, (int) block.r1.getX() / SIZE);
+					tetrisBoard.fillCell((int) block.r2.getY() / SIZE, (int) block.r2.getX() / SIZE);
+					tetrisBoard.fillCell((int) block.r3.getY() / SIZE, (int) block.r3.getX() / SIZE);
+					tetrisBoard.fillCell((int) block.r4.getY() / SIZE, (int) block.r4.getX() / SIZE);
 					control.resetRotation();
 					time.cancel();
 					changeSpeed();
 					// tetrisBoard.displayBoard();
 				} else {
-					control.moveDown(john);
+					control.moveDown(block);
 					score += 1;
 					scoreLabel.setText("Score: " + score);
 				}
 			}
 			// If left arrow is pressed, try to move the current block left
-			else if (e.getCode() == KeyCode.LEFT) {
+			else if (e.getCode() == KeyCode.LEFT && pause == false) {
 				// If the current block can move left, move it left by 1 square
-				if (!canMoveLeft(john)) {
-					control.moveLeft(john);
+				if (!canMoveLeft(block)) {
+					control.moveLeft(block);
 				}
 			}
 			// If the right arrow is pressed, try to move the current block right
-			else if (e.getCode() == KeyCode.RIGHT) {
+			else if (e.getCode() == KeyCode.RIGHT && pause == false) {
 				// If the current block can move right, move it right by 1 square
-				if (!canMoveRight(john)) {
-					control.moveRight(john);
+				if (!canMoveRight(block)) {
+					control.moveRight(block);
 				}
 			}
 			// If the space bar is pressed, move the current block all the way to the last available row
-			else if (e.getCode() == KeyCode.SPACE) {
+			else if (e.getCode() == KeyCode.SPACE && pause == false) {
 				// If the current block can move down, keep moving it down by 1
-				while (!cannotMoveDown(john)) {
-					control.moveDown(john);
+				while (!cannotMoveDown(block)) {
+					control.moveDown(block);
 					score += 2;
 					scoreLabel.setText("Score: " + score);
 				}
-				tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-				tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-				tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-				tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+				tetrisBoard.fillCell((int) block.r1.getY() / SIZE, (int) block.r1.getX() / SIZE);
+				tetrisBoard.fillCell((int) block.r2.getY() / SIZE, (int) block.r2.getX() / SIZE);
+				tetrisBoard.fillCell((int) block.r3.getY() / SIZE, (int) block.r3.getX() / SIZE);
+				tetrisBoard.fillCell((int) block.r4.getY() / SIZE, (int) block.r4.getX() / SIZE);
 				control.resetRotation();
 				// Cancel the timer and call it again once the block reaches the bottom
 				time.cancel();
 				changeSpeed();
 			}
 			// If the "Z" key is pressed, try to rotate the current block left
-			else if (e.getCode() == KeyCode.Z) {
+			else if (e.getCode() == KeyCode.Z && pause == false) {
 				// If the block can rotate left, rotate it left
-				if (isRotate(john)) {
-					control.rotateLeft(john);
+				if (isRotate(block)) {
+					control.rotateLeft(block);
 				}
 			}
 			// If the "S" key is pressed, try to rotate the current block right
-			else if (e.getCode() == KeyCode.X) {
+			else if (e.getCode() == KeyCode.X && pause == false) {
 				// If the block can rotate right, rotate it left
-				if (isRotate(john)) {
-					control.rotateRight(john);
+				if (isRotate(block)) {
+					control.rotateRight(block);
+				}
+			}
+			else if (e.getCode() == KeyCode.P) {
+				if (pause == false) {
+					time.cancel();
+					gameScreen.getChildren().add(pauseDisplay);
+					pause = true;
+				}
+				else {
+					changeSpeed();
+					gameScreen.getChildren().remove(pauseDisplay);
+					pause = false;
 				}
 			}
 		});
@@ -308,19 +341,19 @@ public class TetrisUI extends Application {
 				}
 				else {
 					// Otherwise, if the block cannot move down, place the block when it reaches the bottom
-					if (cannotMoveDown(john)) {
+					if (cannotMoveDown(block)) {
 						// (For special cases) if a rectangle reaches the top and is to be placed, do not place the topmost block on the board
-						if (john.r1.getY() < 0) {
-							tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-							tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-							tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+						if (block.r1.getY() < 0) {
+							tetrisBoard.fillCell((int) block.r2.getY() / SIZE, (int) block.r2.getX() / SIZE);
+							tetrisBoard.fillCell((int) block.r3.getY() / SIZE, (int) block.r3.getX() / SIZE);
+							tetrisBoard.fillCell((int) block.r4.getY() / SIZE, (int) block.r4.getX() / SIZE);
 						}
 						// Otherwise place the whole block on the board
 						else {
-							tetrisBoard.fillCell((int) john.r1.getY() / SIZE, (int) john.r1.getX() / SIZE);
-							tetrisBoard.fillCell((int) john.r2.getY() / SIZE, (int) john.r2.getX() / SIZE);
-							tetrisBoard.fillCell((int) john.r3.getY() / SIZE, (int) john.r3.getX() / SIZE);
-							tetrisBoard.fillCell((int) john.r4.getY() / SIZE, (int) john.r4.getX() / SIZE);
+							tetrisBoard.fillCell((int) block.r1.getY() / SIZE, (int) block.r1.getX() / SIZE);
+							tetrisBoard.fillCell((int) block.r2.getY() / SIZE, (int) block.r2.getX() / SIZE);
+							tetrisBoard.fillCell((int) block.r3.getY() / SIZE, (int) block.r3.getX() / SIZE);
+							tetrisBoard.fillCell((int) block.r4.getY() / SIZE, (int) block.r4.getX() / SIZE);
 						}
 						control.resetRotation(); // Resets the rotation number
 						Platform.runLater(() -> deleteLines()); // Deletes a line, if possible
@@ -330,7 +363,7 @@ public class TetrisUI extends Application {
 					// If the block can move down, move the block down by 1 square
 					else {
 						if (go) {
-							control.moveDown(john);
+							control.moveDown(block);
 						}
 						else {
 							go = true;
@@ -559,7 +592,7 @@ public class TetrisUI extends Application {
 		control.resetRotation(); // Resets the rotation number
 		
 		// Spawns the shape in the next box onto the board and spawns a new shape in the next box
-		john = spawnShapeOnBoard(nextShape);
+		block = spawnShapeOnBoard(nextShape);
 		droughtCount.setText("Longbar drought:" + droughtCounter);
 		nextShape = spawnShape();
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
@@ -635,6 +668,28 @@ public class TetrisUI extends Application {
 		else {
 			return ((block.r2.getX() - SIZE) >= 0 && (block.r2.getX() + SIZE) < WIDTH && (block.r2.getY() + SIZE) < HEIGHT
 					&& !tetrisBoard.checkRotationPoint(block));
+		}
+	}
+	
+	/**
+	 * Plays the background music
+	 */
+	public static void playBGM() {
+		String path = "Tetris.wav";
+		File music = new File(path);
+		
+		try {
+			// If the file exists in the program, play the music, otherwise display an error
+			if (music.exists()) {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(music);
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.loop(clip.LOOP_CONTINUOUSLY);
+			}
+			else {
+				System.out.println("File not found");
+			}
+		} catch (Exception ex) {
 		}
 	}
  }

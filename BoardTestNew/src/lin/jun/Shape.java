@@ -3,11 +3,25 @@ package lin.jun;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * The class for initializing the different shapes for the game
+ * @author Jun Lin
+ * @author Kenneth Ou
+ */
+
 public class Shape {
-	Rectangle r1, r2, r3, r4;
-	Color shapeColor;
+	public Rectangle r1, r2, r3, r4;
+	private Color shapeColor;
 	private String shapeType;
 	
+	/**
+	 * TODO
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @param shapeName
+	 */
 	public Shape(Rectangle a, Rectangle b, Rectangle c, Rectangle d, String shapeName) {
 		r1 = a;
 		r2 = b;
