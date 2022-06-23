@@ -36,18 +36,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * A simulation of the classic Tetris game
  * @author Jun Lin
