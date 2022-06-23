@@ -36,6 +36,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * A simulation of the classic Tetris game
  * @author Jun Lin
@@ -104,16 +116,6 @@ public class TetrisUI extends Application {
 		droughtCount.setFont(labelFont);
 		restart.setFont(labelFont);
 		controlContent.setFont(contentFont);
-		
-		pauseDisplay.setAlignment(Pos.CENTER);
-		Rectangle pauseRect = new Rectangle(SIZE * 7, SIZE * 4);
-		pauseDisplay.setShape(pauseRect);
-		pauseDisplay.setStyle("-fx-background-color: #FFFFFF");
-		Label pauseLabel1 = new Label("GAME PAUSED");
-		Label pauseLabel2 = new Label("Press P to continue");
-		pauseLabel1.setFont(labelFont);
-		pauseLabel2.setFont(contentFont);
-		pauseDisplay.getChildren().addAll(pauseLabel1, pauseLabel2);
 		
 		// Sets the properties of the next box
 		nextBox.setStyle("-fx-fill: #F1F2F4; -fx-stroke: black; -fx-stroke-width: 1");
@@ -289,6 +291,11 @@ public class TetrisUI extends Application {
 		stage.setTitle("TETRIS");
 		stage.show();
 	}
+	
+	/**
+	 * Creates the display to note that the game is paused
+	 * @param pause if the game is paused or not
+	 */
 	private void pauseGame(boolean pause) {
 		if (pause) {
 		Rectangle endPanel = new Rectangle();
@@ -297,20 +304,23 @@ public class TetrisUI extends Application {
 		endPanel.setArcHeight(35);
 		endPanel.setArcWidth(35);
 
-		Label winningText = new Label("Paused");
+		Label pauseText = new Label("Paused");
+		Label pauseText2 = new Label("Press P to continue");
 		Font font = new Font("Helvetica", 50);
-		winningText.setTextFill(Color.GREEN);
-		winningText.setFont(font);
-		winningText.setAlignment(Pos.CENTER);
-		VBox winUI = new VBox(20);
-		winUI.setMaxSize(350, 200);
+		Font continueFont = new Font("Helvetica", 25);
+		pauseText.setTextFill(Color.GREEN);
+		pauseText.setFont(font);
+		pauseText2.setFont(continueFont);
+		VBox pauseScreen = new VBox(20);
+		pauseScreen.setMaxSize(350, 200);
 
-		winUI.setShape(endPanel);
-		winUI.setStyle("-fx-background-color: #ECD384");
-		winUI.setAlignment(Pos.CENTER);
-		winUI.getChildren().addAll(winningText);
+		pauseScreen.setShape(endPanel);
+		pauseScreen.setStyle("-fx-background-color: #ECD384");
+		pauseScreen.setAlignment(Pos.CENTER);
+		pauseScreen.getChildren().addAll(pauseText, pauseText2);
 
-		gameScreen.getChildren().add(winUI);
+		pauseScreen.setAlignment(Pos.CENTER);
+		gameScreen.getChildren().add(pauseScreen);
 		}
 		if (!pause) {
 			gameScreen.getChildren().remove(1);
@@ -485,11 +495,17 @@ public class TetrisUI extends Application {
 		return block;
 	}
 
+	/**
+	 * Spawns the shape in the next box to the game board
+	 * @param block the block to spawn from the next box
+	 * @return returns the block in the next box
+	 */
 	public static Shape spawnShapeOnBoard(Shape block) {
 
 		String shapeType = block.getShapeType();
 		Shape nextShape = block;
 
+		// Sets the location for different block types
 		if (shapeType.equals("T")) {
 			block.setLocation(block.r1, 3 * SIZE, 1 * SIZE);
 			block.setLocation(block.r2, 4 * SIZE, 1 * SIZE);
@@ -726,3 +742,5 @@ public class TetrisUI extends Application {
 		}
 	}
  }
+
+
