@@ -288,7 +288,7 @@ public class TetrisUI extends Application {
 		
 		// Sets the initial scene to the player input scene
 		stage.setScene(playerInputScene);
-		stage.setTitle("TETRIS");
+		stage.setTitle("RUSSIAN BLOCK GAME");
 		stage.show();
 	}
 	
