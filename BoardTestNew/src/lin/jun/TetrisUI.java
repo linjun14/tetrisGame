@@ -629,7 +629,7 @@ public class TetrisUI extends Application {
 		
 		// Spawns the shape in the next box onto the board and spawns a new shape in the next box
 		block = spawnShapeOnBoard(nextShape);
-		droughtCount.setText("Longbar drought:" + droughtCounter);
+		droughtCount.setText("Longbar drought: " + droughtCounter);
 		nextShape = spawnShape();
 		screen.getChildren().addAll(nextShape.r1, nextShape.r2, nextShape.r3, nextShape.r4);
 		
