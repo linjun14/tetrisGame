@@ -685,6 +685,7 @@ public class TetrisUI extends Application {
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioInputStream);
 				clip.loop(clip.LOOP_CONTINUOUSLY);
+				System.out.println("Jonh");
 			}
 			else {
 				System.out.println("File not found");
