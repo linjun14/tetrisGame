@@ -35,6 +35,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+
 /**
  * A simulation of the classic Tetris game
  * @author Jun Lin
@@ -272,13 +273,13 @@ public class TetrisUI extends Application {
 			else if (e.getCode() == KeyCode.P) {
 				if (pause == false) {
 					time.cancel();
-					gameScreen.getChildren().add(pauseDisplay);
 					pause = true;
+					pauseGame(pause);
 				}
 				else {
 					changeSpeed();
-					gameScreen.getChildren().remove(pauseDisplay);
 					pause = false;
+					pauseGame(pause);
 				}
 			}
 		});
@@ -288,7 +289,34 @@ public class TetrisUI extends Application {
 		stage.setTitle("TETRIS");
 		stage.show();
 	}
+	private void pauseGame(boolean pause) {
+		if (pause) {
+		Rectangle endPanel = new Rectangle();
+		endPanel.setHeight(125);
+		endPanel.setWidth(350);
+		endPanel.setArcHeight(35);
+		endPanel.setArcWidth(35);
 
+		Label winningText = new Label("Paused");
+		Font font = new Font("Helvetica", 50);
+		winningText.setTextFill(Color.GREEN);
+		winningText.setFont(font);
+		winningText.setAlignment(Pos.CENTER);
+		VBox winUI = new VBox(20);
+		winUI.setMaxSize(350, 200);
+
+		winUI.setShape(endPanel);
+		winUI.setStyle("-fx-background-color: #ECD384");
+		winUI.setAlignment(Pos.CENTER);
+		winUI.getChildren().addAll(winningText);
+
+		gameScreen.getChildren().add(winUI);
+		}
+		if (!pause) {
+			gameScreen.getChildren().remove(1);
+		}
+	
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
