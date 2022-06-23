@@ -54,7 +54,7 @@ public class TetrisUI extends Application {
 	private static int score = 0;
 	private static int linesCleared = 0;
 	private static int level = 0;
-	private static int droughtCounter = 0;
+	private static int droughtCounter = 0; // Number of consecutive pieces that is not the I-block
 	private static int highScore = 0;
 	private static Shape nextShape = spawnShape(); // Spawns the first shape
 	public static Shape block = spawnShapeOnBoard(nextShape); // Spawns the first shape on the game board
@@ -66,7 +66,7 @@ public class TetrisUI extends Application {
 	private static Button restart = new Button("RESTART"); // Button for restarting the game
 	private Rectangle nextBox = new Rectangle(SIZE * 5, SIZE * 4);
 	private static int fallSpeed; // Auto drop speed of the blocks
-	private static Timer time;
+	private static Timer time; // The timer for the game
 	private boolean pause = false; // Pause game status
 	private static boolean go = false; // Prevents piece from moving down when the timer is called
 	private static Controller control = new Controller(); // The controller object for the game
@@ -360,7 +360,7 @@ public class TetrisUI extends Application {
 						Alert gameOverPage = new Alert(AlertType.INFORMATION);
 						restart.setVisible(true);
 						gameOverPage.setHeaderText("Game Over");
-						gameOverPage.setContentText(PLAYERNAME + ". Your score:" + score);
+						gameOverPage.setContentText(PLAYERNAME + ". Your score: " + score);
 						gameOverPage.showAndWait();
 					});
 					time.cancel(); // Cancels the timer
